@@ -1,6 +1,7 @@
 {
   "name": "netflix-clone",
   "version": "0.1.0",
+  "homepage": "https://colorv.github.io/react-practice2/",
   "private": true,
   "dependencies": {
     "@testing-library/jest-dom": "^5.16.5",
@@ -26,7 +27,7 @@
   },
   "scripts": {
     "start": "react-scripts start",
-    "build": "react-scripts build",
+    "build": "react-scripts build && gh-pages -d build",
     "test": "react-scripts test",
     "eject": "react-scripts eject"
   },
@@ -51,6 +52,7 @@
   "devDependencies": {
     "@types/react-helmet": "^6.1.6",
     "@types/react-router-dom": "^5.3.3",
-    "@types/styled-components": "^5.1.26"
+    "@types/styled-components": "^5.1.26",
+    "gh-pages": "^5.0.0"
   }
 }
