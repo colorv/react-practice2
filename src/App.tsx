@@ -11,7 +11,7 @@ import OriginalAudio from "./Routes/OriginalAudio";
 function App() {
   // regex사용해서 movieID number로만 받기
   return (
-    <BrowserRouter>
+    <BrowserRouter basename={process.env.PUBLIC_URL}>
       <Header />
       <Routes>
         <Route path="/" element={<Home />}>
