@@ -3,12 +3,24 @@ import { motion } from "framer-motion";
 import { useEffect, useState } from "react";
 import { useQueries, useQuery, UseQueryResult } from "react-query";
 import { useNavigate } from "react-router-dom";
-import { useRecoilValue, useSetRecoilState } from "recoil";
+import { useRecoilState, useRecoilValue, useSetRecoilState } from "recoil";
 import { getPreviewMovies, getSimilarMovies } from "../api";
-import { pathState, previewState, scorllState } from "../atoms";
+import {
+  myListMoviesState,
+  pathState,
+  previewState,
+  scorllState,
+} from "../atoms";
 import { PreviewMovie, PreviewProps, SimilarMovies } from "../types";
-import { getImage } from "../utils";
-import { CloseIcon, PlusIcon, PlayIcon, DownIcon, UpIcon } from "./Icons";
+import { getImage, removeFromMyList, saveToMyList } from "../utils";
+import {
+  CloseIcon,
+  PlusIcon,
+  PlayIcon,
+  DownIcon,
+  UpIcon,
+  CheckIcon,
+} from "./Icons";
 import FilmRating from "./FilmRating";
 
 const PreviewOverlay = styled(motion.div)`
@@ -372,6 +384,7 @@ function ModalPreveiw({ content, movieId }: PreviewProps) {
   const scrollY = useRecoilValue(scorllState);
   const [visible, setVisible] = useState(false);
   const [similarMovieId, setSimilarMovieId] = useState<number[]>([]);
+  const [myListMovies, setMyListMovies] = useRecoilState(myListMoviesState);
 
   const { isLoading, data } = useQuery<PreviewMovie>(
     ["preview", `${movieId}`],
@@ -440,8 +453,6 @@ function ModalPreveiw({ content, movieId }: PreviewProps) {
             <PreviewImgWrapper style={{ position: "relative" }}>
               <PreviewImg src={getImage(data.backdrop_path, "w780")} />
 
-              {/* --- Logo --- */}
-
               <MainInfoRow className="info-wrapper">
                 {data.images.logos.length !== 0 ? (
                   <MainInfoLogo
@@ -449,7 +460,6 @@ function ModalPreveiw({ content, movieId }: PreviewProps) {
                     alt="logo"
                   />
                 ) : (
-                  // 텍스트로고 - 미디어쿼리로 조절하기
                   <span style={{ fontSize: "40px", marginBottom: "10px" }}>
                     {data.title}
                   </span>
@@ -598,9 +608,33 @@ function ModalPreveiw({ content, movieId }: PreviewProps) {
                               </SimilarItemDetailHeaderText>
 
                               <SimilarItemDetailHeaderBtn>
-                                <CircleBtn style={{ padding: "0.4vw" }}>
-                                  <PlusIcon />
-                                </CircleBtn>
+                                {myListMovies.includes(movie.data.id) ? (
+                                  <CircleBtn
+                                    onClick={() =>
+                                      removeFromMyList(
+                                        movie.data.id,
+                                        myListMovies,
+                                        setMyListMovies
+                                      )
+                                    }
+                                    style={{ padding: "0.4vw" }}
+                                  >
+                                    <CheckIcon />
+                                  </CircleBtn>
+                                ) : (
+                                  <CircleBtn
+                                    onClick={() =>
+                                      saveToMyList(
+                                        movie.data.id,
+                                        myListMovies,
+                                        setMyListMovies
+                                      )
+                                    }
+                                    style={{ padding: "0.4vw" }}
+                                  >
+                                    <PlusIcon />
+                                  </CircleBtn>
+                                )}
                               </SimilarItemDetailHeaderBtn>
                             </SimilarItemDetailHeader>
 

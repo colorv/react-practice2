@@ -146,6 +146,25 @@ export function PlusIcon() {
   );
 }
 
+export function CheckIcon() {
+  return (
+    <svg
+      xmlns="http://www.w3.org/2000/svg"
+      width="18"
+      height="18"
+      fill="white"
+      className="bi bi-check-lg"
+      viewBox="0 0 16 16"
+    >
+      <path
+        stroke="white"
+        strokeWidth="0.5"
+        d="M12.736 3.97a.733.733 0 0 1 1.047 0c.286.289.29.756.01 1.05L7.88 12.01a.733.733 0 0 1-1.065.02L3.217 8.384a.757.757 0 0 1 0-1.06.733.733 0 0 1 1.047 0l3.052 3.093 5.4-6.425a.247.247 0 0 1 .02-.022Z"
+      />
+    </svg>
+  );
+}
+
 export function CloseIcon() {
   return (
     <svg
@@ -295,39 +314,6 @@ export function FilmRatingIcon({ age, footer }: FilmRatingIconProps) {
   return (
     <FilmRatings className={`rating_${age} ${footer ? "footer_rating" : ""}`}>
       <span>{age}</span>
-    </FilmRatings>
-  );
-}
-
-// Rated12,15,18,All 지우기 -> FilmRatingIcon으로 대체함
-export function Rated12() {
-  return (
-    <FilmRatings className="rating_12">
-      <span>12</span>
-    </FilmRatings>
-  );
-}
-
-export function Rated15() {
-  return (
-    <FilmRatings className="rating_15">
-      <span>15</span>
-    </FilmRatings>
-  );
-}
-
-export function Rated18() {
-  return (
-    <FilmRatings className="rating_18">
-      <span>18</span>
-    </FilmRatings>
-  );
-}
-
-export function RatedAll() {
-  return (
-    <FilmRatings className="rating_all">
-      <span>ALL</span>
     </FilmRatings>
   );
 }

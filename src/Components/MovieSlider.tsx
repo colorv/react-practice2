@@ -5,11 +5,18 @@ import { Link, useNavigate } from "react-router-dom";
 import { useRecoilState, useRecoilValue, useSetRecoilState } from "recoil";
 import styled from "styled-components";
 import { getSimilarMovies } from "../api";
-import { hoverState, pathState, previewState, scorllState } from "../atoms";
+import {
+  hoverState,
+  myListMoviesState,
+  pathState,
+  previewState,
+  scorllState,
+} from "../atoms";
 import { Content, MovieSliderProps, SimilarMovies } from "../types";
-import { getImage } from "../utils";
+import { getImage, removeFromMyList, saveToMyList } from "../utils";
 import FilmRating from "./FilmRating";
 import {
+  CheckIcon,
   CirclePlayIcon,
   DownIcon,
   LeftArrow,
@@ -357,6 +364,8 @@ function MovieSlider<T extends Content>({
   const setPreviewActive = useSetRecoilState(previewState);
   const setScrollY = useSetRecoilState(scorllState);
 
+  const [myListMovies, setMyListMovies] = useRecoilState(myListMoviesState);
+
   const movies: UseQueryResult<SimilarMovies>[] = useQueries(
     movieId.map((id) => {
       return {
@@ -449,6 +458,13 @@ function MovieSlider<T extends Content>({
     onResize();
   }, []);
 
+  useEffect(() => {
+    const myListJson = localStorage.getItem("mylist");
+    if (myListJson) {
+      setMyListMovies(JSON.parse(myListJson));
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
   return (
     <>
       {allMoviesLoaded && (
@@ -579,9 +595,33 @@ function MovieSlider<T extends Content>({
                                 </CircleBtn>
                               </BtnColumn>
                               <BtnColumn>
-                                <CircleBtn>
-                                  <PlusIcon />
-                                </CircleBtn>
+                                {myListMovies.includes(movie.data.id) ? (
+                                  <CircleBtn
+                                    onClick={() =>
+                                      removeFromMyList(
+                                        movie.data?.id,
+                                        myListMovies,
+                                        setMyListMovies
+                                      )
+                                    }
+                                    style={{ padding: "0.4vw" }}
+                                  >
+                                    <CheckIcon />
+                                  </CircleBtn>
+                                ) : (
+                                  <CircleBtn
+                                    onClick={() =>
+                                      saveToMyList(
+                                        movie.data?.id,
+                                        myListMovies,
+                                        setMyListMovies
+                                      )
+                                    }
+                                    style={{ padding: "0.4vw" }}
+                                  >
+                                    <PlusIcon />
+                                  </CircleBtn>
+                                )}
                               </BtnColumn>
                               <BtnColumn>
                                 <CircleBtn>
@@ -589,7 +629,14 @@ function MovieSlider<T extends Content>({
                                 </CircleBtn>
                               </BtnColumn>
                               <BtnColumn>
-                                <CircleBtn>
+                                <CircleBtn
+                                  onClick={() =>
+                                    onClickPreview(
+                                      movie.data?.id,
+                                      scrollY.get()
+                                    )
+                                  }
+                                >
                                   <DownIcon />
                                 </CircleBtn>
                               </BtnColumn>

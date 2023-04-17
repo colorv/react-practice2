@@ -20,6 +20,10 @@ const Wrapper = styled.div`
   &.preview-modal_active {
     position: fixed;
   }
+  & main {
+    padding-top: 68px;
+    padding-bottom: 50px;
+  }
 `;
 
 function OriginalAudio() {
@@ -32,8 +36,8 @@ function OriginalAudio() {
   const popular: UseQueryResult<Movies>[] = useQueries(
     popularPage.map((page) => {
       return {
-        queryKey: ["movies", "top_rated", page],
-        queryFn: () => getMovies("movie", "top_rated", page),
+        queryKey: ["movies", "popular", page],
+        queryFn: () => getMovies("movie", "popular", page),
       };
     })
   );
@@ -69,7 +73,7 @@ function OriginalAudio() {
         style={{ top: movieMatch ? `-${scrollY}px` : "" }}
       >
         {allQueriesLoaded ? (
-          <main style={{ paddingBottom: "50px", paddingTop: "68px" }}>
+          <main>
             <MovieList content="movie" category="popular" movieId={movieIds} />
           </main>
         ) : (

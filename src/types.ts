@@ -1,6 +1,11 @@
 export type Content = "movie" | "tv";
-type MovieCategory = "now_playing" | "top_rated" | "popular" | "upcoming";
-type TvCategory = "on_the_air" | "top_rated" | "popular";
+type MovieCategory =
+  | "now_playing"
+  | "top_rated"
+  | "popular"
+  | "upcoming"
+  | "my_list";
+type TvCategory = "on_the_air" | "top_rated" | "popular" | "my_list";
 
 export type Category<T extends Content> = T extends "movie"
   ? MovieCategory
@@ -29,7 +34,7 @@ export interface PreviewProps {
 export interface MovieListProps<T extends Content> {
   content: Content;
   category: Category<T>;
-  movieId: number[];
+  movieId?: number[];
 }
 
 // FlimRating

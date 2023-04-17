@@ -19,3 +19,8 @@ export const scorllState = atom({
   key: "scrollState",
   default: 0,
 });
+
+export const myListMoviesState = atom<number[]>({
+  key: "myListMoviesState",
+  default: [],
+});

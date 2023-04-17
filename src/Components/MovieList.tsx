@@ -4,11 +4,18 @@ import { useQueries, UseQueryResult } from "react-query";
 import { useNavigate } from "react-router-dom";
 import { useRecoilState, useRecoilValue, useSetRecoilState } from "recoil";
 import { getSimilarMovies } from "../api";
-import { hoverState, pathState, previewState, scorllState } from "../atoms";
+import {
+  hoverState,
+  myListMoviesState,
+  pathState,
+  previewState,
+  scorllState,
+} from "../atoms";
 import { Content, MovieListProps, SimilarMovies } from "../types";
-import { getImage } from "../utils";
+import { getImage, removeFromMyList, saveToMyList } from "../utils";
 import FilmRating from "./FilmRating";
 import {
+  CheckIcon,
   CirclePlayIcon,
   DownIcon,
   PeriodIcon,
@@ -16,6 +23,7 @@ import {
   ThumbsUp,
 } from "./Icons";
 import Loading from "./Loading";
+import { useEffect } from "react";
 
 const Wrapper = styled.div`
   width: 100vw;
@@ -62,9 +70,6 @@ const Movie = styled.div`
   transition: transform ease-in-out 0.5s;
   position: relative;
   padding: 0 0.2vw;
-  &.item- {
-    display: none;
-  }
 `;
 const MovieImgWrapper = styled.div`
   height: 0;
@@ -226,19 +231,28 @@ function MovieList<T extends Content>({
 }: MovieListProps<T>) {
   const history = useNavigate();
   const currentPath = useRecoilValue(pathState);
-  const [{ hover, hoverId }, setHover] = useRecoilState(hoverState);
   const { scrollY } = useScroll();
+  const [{ hover, hoverId }, setHover] = useRecoilState(hoverState);
+  const [myListMovies, setMyListMovies] = useRecoilState(myListMoviesState);
   const setPreviewActive = useSetRecoilState(previewState);
   const setScrollY = useSetRecoilState(scorllState);
 
   const movies: UseQueryResult<SimilarMovies>[] = useQueries(
-    movieId.map((id) => {
-      return {
-        queryKey: [category, id],
-        queryFn: () => getSimilarMovies(content, id),
-        staleTime: 600000,
-      };
-    })
+    movieId
+      ? movieId.map((id) => {
+          return {
+            queryKey: [category, id],
+            queryFn: () => getSimilarMovies(content, id),
+            staleTime: 600000,
+          };
+        })
+      : myListMovies.map((id) => {
+          return {
+            queryKey: [category, id],
+            queryFn: () => getSimilarMovies(content, id),
+            staleTime: 600000,
+          };
+        })
   );
 
   const allMoviesLoaded = movies.every((movie) => !movie.isLoading);
@@ -275,6 +289,13 @@ function MovieList<T extends Content>({
     window.scrollTo({ top: 0, left: 0, behavior: "smooth" });
   };
 
+  useEffect(() => {
+    const myListJson = localStorage.getItem("mylist");
+    if (myListJson) {
+      setMyListMovies(JSON.parse(myListJson));
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
   return (
     <Wrapper>
       {allMoviesLoaded ? (
@@ -339,9 +360,33 @@ function MovieList<T extends Content>({
                             </CircleBtn>
                           </BtnColumn>
                           <BtnColumn>
-                            <CircleBtn>
-                              <PlusIcon />
-                            </CircleBtn>
+                            {myListMovies.includes(movie.data.id) ? (
+                              <CircleBtn
+                                onClick={() =>
+                                  removeFromMyList(
+                                    movie.data?.id,
+                                    myListMovies,
+                                    setMyListMovies
+                                  )
+                                }
+                                style={{ padding: "0.4vw" }}
+                              >
+                                <CheckIcon />
+                              </CircleBtn>
+                            ) : (
+                              <CircleBtn
+                                onClick={() =>
+                                  saveToMyList(
+                                    movie.data?.id,
+                                    myListMovies,
+                                    setMyListMovies
+                                  )
+                                }
+                                style={{ padding: "0.4vw" }}
+                              >
+                                <PlusIcon />
+                              </CircleBtn>
+                            )}
                           </BtnColumn>
                           <BtnColumn>
                             <CircleBtn>
