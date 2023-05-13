@@ -11,7 +11,7 @@ export type Category<T extends Content> = T extends "movie"
   ? MovieCategory
   : TvCategory;
 
-export interface MainMovieProps<T extends Content> {
+export interface HeaderMovieProps<T extends Content> {
   content: T;
   category: Category<T>;
   movieId: number;

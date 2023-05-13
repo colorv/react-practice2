@@ -47,7 +47,7 @@ const PreviewModal = styled(motion.div)`
   font-size: 14px;
 `;
 
-const PreviewFooter = styled.div`
+const PreviewFooter = styled.footer`
   padding-bottom: 2em;
 `;
 const PreviewFooterTitle = styled.div`
@@ -71,7 +71,7 @@ const Tag = styled.span`
   }
 `;
 
-const PreviewImgWrapper = styled.div`
+const PreviewImgContainer = styled.header`
   width: 100%;
 `;
 
@@ -90,7 +90,14 @@ const PreviewImgShadow = styled.div`
   background: linear-gradient(0deg, #181818, transparent 50%);
 `;
 
-const PreviewDetail = styled.div`
+const CloseWrapper = styled.div`
+  position: absolute;
+  top: 0;
+  right: 0;
+  margin: 1.5em;
+`;
+
+const PreviewDetail = styled.main`
   padding: 0 3em;
   background-color: ${({ theme }) => theme.black.darker};
 `;
@@ -158,12 +165,12 @@ const PreviewKeyword = styled.div`
   line-height: 24px;
 `;
 
-const SimilarContent = styled.div``;
+const SimilarContent = styled.section``;
 const SimilarHeader = styled.h1`
   font-size: 24px;
   margin: 48px 0px 20px 0px;
 `;
-const SimilarItems = styled.div`
+const SimilarItems = styled.ul`
   display: grid;
   width: 100%;
   grid-template-columns: repeat(3, 1fr);
@@ -176,7 +183,7 @@ const SimilarItems = styled.div`
     grid-template-columns: repeat(2, 1fr);
   }
 `;
-const SimilarItem = styled.div`
+const SimilarItem = styled.li`
   width: 100%;
   padding-bottom: 0.5em;
   border-radius: 6px;
@@ -295,7 +302,7 @@ const Img = styled.img`
   width: 100%;
 `;
 
-const MainInfoRow = styled.div`
+const LogoContainer = styled.div`
   display: flex;
   flex-direction: column;
   justify-content: flex-end;
@@ -306,22 +313,14 @@ const MainInfoRow = styled.div`
   z-index: 1;
 `;
 
-const MainInfoLogo = styled.img`
+const Logo = styled.img`
   width: 100%;
   max-height: 150px;
   max-width: 300px;
   margin-bottom: 1.5em;
 `;
 
-const MainInfoOverView = styled.p`
-  width: 100%;
-  font-size: 1.2vw;
-  line-height: normal;
-  text-shadow: 2px 2px 4px black;
-  color: ${({ theme }) => theme.white.darker};
-`;
-
-const MainBtnContainer = styled.div`
+const BtnContainer = styled.div`
   display: flex;
 `;
 const RectangleBtn = styled.div`
@@ -441,23 +440,28 @@ function ModalPreveiw({ content, movieId }: PreviewProps) {
         initial="initial"
         animate="animate"
         onClick={onExitPreview}
+        className="preview-overlay"
       />
 
       <PreviewModal
         variants={PreviewMovieVariants}
         initial="initial"
         animate="animate"
+        className="preview"
       >
         {!isLoading && data && (
           <>
-            <PreviewImgWrapper style={{ position: "relative" }}>
+            <PreviewImgContainer
+              style={{ position: "relative" }}
+              className="preview-header"
+            >
               <PreviewImg src={getImage(data.backdrop_path, "w780")} />
 
-              <MainInfoRow className="info-wrapper">
+              <LogoContainer className="logo-container">
                 {data.images.logos.length !== 0 ? (
-                  <MainInfoLogo
+                  <Logo
                     src={getImage(data.images.logos[0].file_path, "w300")}
-                    alt="logo"
+                    alt={data.title}
                   />
                 ) : (
                   <span style={{ fontSize: "40px", marginBottom: "10px" }}>
@@ -465,33 +469,27 @@ function ModalPreveiw({ content, movieId }: PreviewProps) {
                   </span>
                 )}
 
-                <MainInfoOverView className="overView" />
-                <MainBtnContainer>
-                  <PlayBtn className="info-btn">
+                <BtnContainer className="btn-container">
+                  <PlayBtn className="play-btn">
                     <PlayIcon />
                     <span>재생</span>
                   </PlayBtn>
-                </MainBtnContainer>
-              </MainInfoRow>
+                </BtnContainer>
+              </LogoContainer>
 
-              <PreviewImgShadow />
-            </PreviewImgWrapper>
-            <div
-              style={{
-                position: "absolute",
-                top: "0",
-                right: "0",
-                margin: "1.5em",
-              }}
-            >
-              <CircleBtn className="close-btn" onClick={onExitPreview}>
-                <CloseIcon />
-              </CircleBtn>
-            </div>
-            <PreviewDetail>
-              <PreviewInfo>
-                <PreviewInfoColumn>
-                  <PreviewMovieData>
+              <PreviewImgShadow className="img-shadow" />
+
+              <CloseWrapper className="close">
+                <CircleBtn className="close-btn" onClick={onExitPreview}>
+                  <CloseIcon />
+                </CircleBtn>
+              </CloseWrapper>
+            </PreviewImgContainer>
+
+            <PreviewDetail className="preview-detail">
+              <PreviewInfo className="preview-info">
+                <PreviewInfoColumn className="info-column1">
+                  <PreviewMovieData className="movie-info">
                     <MovieDataColumn>
                       <VoteAverage>
                         {`평점 ${Math.round(data.vote_average * 10)}%`}
@@ -507,13 +505,18 @@ function ModalPreveiw({ content, movieId }: PreviewProps) {
                       </RunTime>
                     </MovieDataColumn>
                   </PreviewMovieData>
-                  <PreviewOverView>
+
+                  <PreviewOverView className="movie-overView">
                     {data.overview
                       ? data.overview
                       : "등록된 줄거리가 없습니다."}
                   </PreviewOverView>
                 </PreviewInfoColumn>
-                <PreviewInfoColumn style={{ width: "32.5%", fontSize: "14px" }}>
+
+                <PreviewInfoColumn
+                  style={{ width: "32.5%", fontSize: "14px" }}
+                  className="info-column2"
+                >
                   <PreviewCast>
                     <Tag>출연: </Tag>
                     {data.credits.cast
@@ -559,7 +562,7 @@ function ModalPreveiw({ content, movieId }: PreviewProps) {
               </PreviewInfo>
 
               {similarMovies.length !== 0 ? (
-                <SimilarContent>
+                <SimilarContent className="similar-content">
                   <SimilarHeader>비슷한 콘텐츠</SimilarHeader>
                   <SimilarItems
                     className={`similar-items ${

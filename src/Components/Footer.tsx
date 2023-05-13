@@ -1,7 +1,7 @@
 import styled from "styled-components";
 import { FacebookIcon, InstagramIcon, TwiiterIcon, YoutubeIcon } from "./Icons";
 
-const Wrapper = styled.div`
+const FooterContainer = styled.footer`
   padding: 0 4%;
   max-width: 980px;
   margin: 20px auto 0 auto;
@@ -20,7 +20,7 @@ const FooterSocialItem = styled.a`
   margin-right: 15px;
 `;
 
-const FooterLink = styled.div`
+const FooterLinks = styled.ul`
   display: grid;
   grid-template-columns: repeat(4, 1fr);
   font-size: 13px;
@@ -29,7 +29,7 @@ const FooterLink = styled.div`
     grid-template-columns: repeat(2, 1fr);
   }
 `;
-const FooterLinkItem = styled.span`
+const FooterLinkItem = styled.li`
   margin-bottom: 16px;
   & span:hover {
     text-decoration: underline;
@@ -55,101 +55,73 @@ const FooterCopyRight = styled.div`
   margin-bottom: 1.5em;
 `;
 
-const FooterCoptyRigthRow = styled.div`
+const FooterCopyRigthRow = styled.div`
   margin-top: 4px;
 `;
 
 function Footer() {
+  const socialItem = [
+    { link: "https://www.facebook.com/", icon: <FacebookIcon /> },
+    { link: "https://www.instagram.com/", icon: <InstagramIcon /> },
+    { link: "https://twitter.com/", icon: <TwiiterIcon /> },
+    { link: "https://www.youtube.com/", icon: <YoutubeIcon /> },
+  ];
+
+  const linkItem = [
+    "화면 해설",
+    "고객 센터",
+    "기프트카드",
+    "미디어 센터",
+    "투자 정보(IR)",
+    "입사 정보",
+    "이용 약관",
+    "개인정보",
+    "법적 고지",
+    "쿠키 설정",
+    "회사 정보",
+    "문의하기",
+  ];
+
+  const copyRight = [
+    "넷플릭스서비시스코리아 유한회사 통신판매업신고번호 : 제1000-서울ㅇㅇ-0111호 전화번호: 080-001-2345",
+    "대표: ㅇㅇㅇㅇ ㅇ ㅇㅇㅇ",
+    "이메일 주소: korea@netfllx.com",
+    "주소: 대한민국 서울특별시 ㅇㅇ구 ㅇㅇㅇ로 00, ㅇㅇㅇㅇㅇㅇ 0동 00층 우편번호 00000",
+    "사업자등록번호: 111-02-00000",
+    "클라우드 호스팅: Amaooo Web Services Inc.",
+    "공정거래위원회 웹사이트",
+  ];
+
   return (
-    <Wrapper>
-      <FooterSocial>
-        <FooterSocialItem href="https://www.facebook.com/">
-          <FacebookIcon />
-        </FooterSocialItem>
-        <FooterSocialItem href="https://www.instagram.com/">
-          <InstagramIcon />
-        </FooterSocialItem>
-        <FooterSocialItem href="https://twitter.com/">
-          <TwiiterIcon />
-        </FooterSocialItem>
-        <FooterSocialItem href="https://www.youtube.com/">
-          <YoutubeIcon />
-        </FooterSocialItem>
+    <FooterContainer className="footer">
+      <FooterSocial className="footer-social">
+        {socialItem.map((item, index) => (
+          <FooterSocialItem key={index} href={item.link}>
+            {item.icon}
+          </FooterSocialItem>
+        ))}
       </FooterSocial>
 
-      <FooterLink>
-        <FooterLinkItem>
-          <span>화면 해설</span>
-        </FooterLinkItem>
-        <FooterLinkItem>
-          <span>고객 센터</span>
-        </FooterLinkItem>
-        <FooterLinkItem>
-          <span>기프트카드</span>
-        </FooterLinkItem>
-        <FooterLinkItem>
-          <span>미디어 센터</span>
-        </FooterLinkItem>
-        <FooterLinkItem>
-          <span>투자 정보(IR)</span>
-        </FooterLinkItem>
-        <FooterLinkItem>
-          <span>입사 정보</span>
-        </FooterLinkItem>
-        <FooterLinkItem>
-          <span>이용 약관</span>
-        </FooterLinkItem>
-        <FooterLinkItem>
-          <span>개인정보</span>
-        </FooterLinkItem>
-        <FooterLinkItem>
-          <span>법적 고지</span>
-        </FooterLinkItem>
-        <FooterLinkItem>
-          <span>쿠키 설정</span>
-        </FooterLinkItem>
-        <FooterLinkItem>
-          <span>회사 정보</span>
-        </FooterLinkItem>
-        <FooterLinkItem>
-          <span>문의하기</span>
-        </FooterLinkItem>
-      </FooterLink>
+      <FooterLinks className="footer-links">
+        {linkItem.map((item, index) => (
+          <FooterLinkItem key={index}>
+            <span>{item}</span>
+          </FooterLinkItem>
+        ))}
+      </FooterLinks>
 
-      <FooterService>
+      <FooterService className="footer-service">
         <FooterServiceItem>서비스 코드</FooterServiceItem>
       </FooterService>
 
-      <FooterCopyRight>
-        <FooterCoptyRigthRow>
-          <span>
-            넷플릭스서비시스코리아 유한회사 통신판매업신고번호:
-            제0000-서울ㅇㅇ-0000호 전화번호: 000-000-0000
-          </span>
-        </FooterCoptyRigthRow>
-        <FooterCoptyRigthRow>
-          <span>대표: ㅇㅇㅇㅇ ㅇ ㅇㅇㅇ</span>
-        </FooterCoptyRigthRow>
-        <FooterCoptyRigthRow>
-          <span>이메일 주소: abced@netflix.com</span>
-        </FooterCoptyRigthRow>
-        <FooterCoptyRigthRow>
-          <span>
-            주소: 대한민국 서울특별시 ㅇㅇ구 ㅇㅇㅇ로 00, ㅇㅇㅇㅇㅇㅇ 0동 00층
-            우편번호 00000
-          </span>
-        </FooterCoptyRigthRow>
-        <FooterCoptyRigthRow>
-          <span>사업자등록번호: 000-00-00000</span>
-        </FooterCoptyRigthRow>
-        <FooterCoptyRigthRow>
-          <span>클라우드 호스팅: Amaooo Web Services Inc.</span>
-        </FooterCoptyRigthRow>
-        <FooterCoptyRigthRow>
-          <span>공정거래위원회 웹사이트</span>
-        </FooterCoptyRigthRow>
+      <FooterCopyRight className="footer-copyRight">
+        {copyRight.map((item, index) => (
+          <FooterCopyRigthRow key={index}>
+            <span>{item}</span>
+          </FooterCopyRigthRow>
+        ))}
       </FooterCopyRight>
-    </Wrapper>
+    </FooterContainer>
   );
 }
 

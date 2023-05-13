@@ -9,17 +9,22 @@ import { pathState, scorllState } from "../atoms";
 import { Movies } from "../types";
 import ModalPreveiw from "../Components/ModalPreview";
 import MovieSlider from "../Components/MovieSlider";
-import MainMovie from "../Components/MainMovie";
+import HeaderMovie from "../Components/HeaderMovie";
 import Footer from "../Components/Footer";
 import Loading from "../Components/Loading";
 
 const BASE_PATH = "/";
 
-const Wrapper = styled.div`
+const Main = styled.main`
   overflow-x: hidden;
+
   &.preview-modal_active {
     position: fixed;
   }
+`;
+
+const MainContainer = styled.div`
+  padding-bottom: 50px;
 `;
 
 function Home() {
@@ -52,15 +57,15 @@ function Home() {
       <Helmet>
         <title>홈 - 넷플릭스</title>
       </Helmet>
-      <Wrapper
-        className={`wraaper ${movieMatch ? "preview-modal_active" : ""}`}
+      <Main
+        className={`main ${movieMatch ? "preview-modal_active" : ""}`}
         style={{ top: movieMatch ? `-${scrollY}px` : "" }}
       >
         {allQueriesLoaded ? (
-          <main style={{ paddingBottom: "50px" }}>
+          <MainContainer className="main-container">
             {nowPlaying[0].data ? (
               <>
-                <MainMovie
+                <HeaderMovie
                   content="movie"
                   category="now_playing"
                   movieId={nowPlaying[0].data.results[0].id}
@@ -120,12 +125,12 @@ function Home() {
                 movieId={nowPlaying[5].data.results.map((movie) => movie.id)}
               />
             ) : null}
-          </main>
+          </MainContainer>
         ) : (
           <Loading />
         )}
         <Footer />
-      </Wrapper>
+      </Main>
 
       {movieMatch ? (
         <ModalPreveiw

@@ -25,7 +25,7 @@ import {
 import Loading from "./Loading";
 import { useEffect } from "react";
 
-const Wrapper = styled.div`
+const Wrapper = styled.article`
   width: 100vw;
   margin: 3vw 0;
   position: relative;
@@ -37,7 +37,7 @@ const GridWrapper = styled.div`
   box-sizing: border-box;
 `;
 
-const GridMovieList = styled.div`
+const GridMovieList = styled.ul`
   display: grid;
   width: 100%;
   @media screen and (min-width: 1400px) {
@@ -66,7 +66,7 @@ const GridMovieList = styled.div`
   }
 `;
 
-const Movie = styled.div`
+const Movie = styled.li`
   transition: transform ease-in-out 0.5s;
   position: relative;
   padding: 0 0.2vw;

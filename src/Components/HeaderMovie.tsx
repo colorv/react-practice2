@@ -5,11 +5,11 @@ import { useRecoilValue, useSetRecoilState } from "recoil";
 import styled from "styled-components";
 import { getMainMovieDetail } from "../api";
 import { pathState, previewState, scorllState } from "../atoms";
-import { Content, MainMovieProps, SimilarMovies } from "../types";
+import { Content, HeaderMovieProps, SimilarMovies } from "../types";
 import { getImage } from "../utils";
 import { InfoIcon, PlayIcon } from "./Icons";
 
-const MainContent = styled.div`
+const Container = styled.header`
   width: 100%;
   display: flex;
   flex-direction: column;
@@ -17,19 +17,19 @@ const MainContent = styled.div`
   position: relative;
 `;
 
-const MainBgImg = styled.img`
+const MovieImg = styled.img`
   width: 100%;
   top: 0;
   position: absolute;
 `;
 
-const MainInfo = styled.div`
+const InfoContainer = styled.section`
   padding-bottom: 40%;
   margin-bottom: 10px;
   position: relative;
 `;
 
-const MainInfoRow = styled.div`
+const MovieInfo = styled.article`
   display: flex;
   flex-direction: column;
   justify-content: flex-end;
@@ -40,12 +40,12 @@ const MainInfoRow = styled.div`
   z-index: 1;
 `;
 
-const MainInfoLogo = styled.img`
+const MovieLogo = styled.img`
   width: 70%;
   margin-bottom: 20px;
 `;
 
-const MainInfoOverView = styled.p`
+const OverView = styled.p`
   display: -webkit-box;
   -webkit-box-orient: vertical;
   -webkit-line-clamp: 3;
@@ -62,7 +62,7 @@ const MainInfoOverView = styled.p`
   /* cursor: default; */
 `;
 
-const MainBtnContainer = styled.div`
+const BtnContainer = styled.div`
   display: flex;
   margin-top: 1.5vw;
 `;
@@ -100,13 +100,13 @@ const MoreBtn = styled(RectangleBtn)`
   }
 `;
 
-const MainShadowContainer = styled.div`
+const ShadowContainer = styled.div`
   width: 100%;
   height: 72.5vw;
   position: absolute;
 `;
 
-const MainInfoShadow = styled.div`
+const InfoShadow = styled.div`
   position: absolute;
   right: 20%;
   top: 0;
@@ -115,7 +115,7 @@ const MainInfoShadow = styled.div`
   background: linear-gradient(80deg, rgba(0, 0, 0, 0.6), #0000 85%);
 `;
 
-const MainBgImgShadow = styled.div`
+const ImgShadow = styled.div`
   position: absolute;
   bottom: 0;
   width: 100%;
@@ -131,11 +131,11 @@ const MainBgImgShadow = styled.div`
   );
 `;
 
-function MainMovie<T extends Content>({
+function HeaderMovie<T extends Content>({
   content,
   movieId,
   category,
-}: MainMovieProps<T>) {
+}: HeaderMovieProps<T>) {
   const history = useNavigate();
   const currentPath = useRecoilValue(pathState);
   const { scrollY } = useScroll();
@@ -158,45 +158,45 @@ function MainMovie<T extends Content>({
   };
 
   return (
-    <MainContent className="main">
+    <Container className="header-movie">
       {!isLoading && (
-        <MainBgImg src={getImage(data?.backdrop_path)} alt="backdropImg" />
+        <MovieImg src={getImage(data?.backdrop_path)} alt="backdropImg" />
       )}
 
-      <MainInfo className="info">
-        <MainInfoRow className="info-wrapper">
+      <InfoContainer className="info-container">
+        <MovieInfo className="info">
           {!isLoading && (
-            <MainInfoLogo
+            <MovieLogo
               src={getImage(data?.images.logos[0].file_path, "w500")}
-              alt="logo"
+              alt={data?.title}
+              className="movie-logo"
             />
           )}
 
-          <MainInfoOverView className="overView">
-            {data?.overview}
-          </MainInfoOverView>
-          <MainBtnContainer>
-            <PlayBtn className="info-btn">
+          <OverView className="movie-overView">{data?.overview}</OverView>
+          <BtnContainer className="btn-container">
+            <PlayBtn className="play-btn">
               <PlayIcon />
               <span>재생</span>
             </PlayBtn>
 
             <MoreBtn
-              className="info-btn"
+              className="more-btn"
               onClick={() => onClickPreview(data?.id, scrollY.get())}
             >
               <InfoIcon />
               <span>상세 정보</span>
             </MoreBtn>
-          </MainBtnContainer>
-        </MainInfoRow>
-      </MainInfo>
-      <MainShadowContainer className="shadow">
-        <MainInfoShadow />
-        <MainBgImgShadow />
-      </MainShadowContainer>
-    </MainContent>
+          </BtnContainer>
+        </MovieInfo>
+      </InfoContainer>
+
+      <ShadowContainer className="shadow">
+        <InfoShadow />
+        <ImgShadow />
+      </ShadowContainer>
+    </Container>
   );
 }
 
-export default MainMovie;
+export default HeaderMovie;

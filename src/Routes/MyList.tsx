@@ -10,16 +10,18 @@ import { useEffect } from "react";
 
 const BASE_PATH = "/my-list";
 
-const Wrapper = styled.div`
+const Main = styled.main`
   padding-bottom: 50px;
   &.preview-modal_active {
     position: fixed;
   }
-  & main {
-    padding-top: 68px;
-    padding-bottom: 50px;
-  }
 `;
+
+const MainContainer = styled.section`
+  padding-bottom: 50px;
+  padding-top: 68px;
+`;
+
 const Title = styled.div`
   display: flex;
   align-items: center;
@@ -69,11 +71,11 @@ function MyList() {
       {/* <Helmet>
         <title>넷플릭스</title>
       </Helmet> */}
-      <Wrapper
+      <Main
         className={`wraaper ${movieMatch ? "preview-modal_active" : ""}`}
         style={{ top: movieMatch ? `-${scrollY}px` : "" }}
       >
-        <main>
+        <MainContainer>
           <Title>
             <h1>내가 찜한 콘텐츠</h1>
           </Title>
@@ -84,9 +86,9 @@ function MyList() {
               <span>아직 찜하신 콘텐츠가 없습니다.</span>
             </EmptyList>
           )}
-        </main>
+        </MainContainer>
         <Footer />
-      </Wrapper>
+      </Main>
 
       {movieMatch ? (
         <ModalPreveiw

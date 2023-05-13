@@ -14,16 +14,17 @@ import MovieList from "../Components/MovieList";
 
 const BASE_PATH = "/original-audio";
 
-const Wrapper = styled.div`
+const Main = styled.main`
   padding-bottom: 50px;
   overflow-x: hidden;
   &.preview-modal_active {
     position: fixed;
   }
-  & main {
-    padding-top: 68px;
-    padding-bottom: 50px;
-  }
+`;
+
+const MainContainer = styled.section`
+  padding-bottom: 50px;
+  padding-top: 68px;
 `;
 
 function OriginalAudio() {
@@ -68,19 +69,19 @@ function OriginalAudio() {
       <Helmet>
         <title>넷플릭스</title>
       </Helmet>
-      <Wrapper
+      <Main
         className={`wraaper ${movieMatch ? "preview-modal_active" : ""}`}
         style={{ top: movieMatch ? `-${scrollY}px` : "" }}
       >
         {allQueriesLoaded ? (
-          <main>
+          <MainContainer>
             <MovieList content="movie" category="popular" movieId={movieIds} />
-          </main>
+          </MainContainer>
         ) : (
           <Loading />
         )}
         <Footer />
-      </Wrapper>
+      </Main>
 
       {movieMatch ? (
         <ModalPreveiw

@@ -9,18 +9,22 @@ import { Movies } from "../types";
 import { Helmet } from "react-helmet-async";
 import ModalPreveiw from "../Components/ModalPreview";
 import MovieSlider from "../Components/MovieSlider";
-import MainMovie from "../Components/MainMovie";
+import HeaderMovie from "../Components/HeaderMovie";
 import Footer from "../Components/Footer";
 import Loading from "../Components/Loading";
 
 const BASE_PATH = "/movies";
 
-const Wrapper = styled.div`
+const Main = styled.main`
   padding-bottom: 50px;
   overflow-x: hidden;
   &.preview-modal_active {
     position: fixed;
   }
+`;
+
+const MainContainer = styled.div`
+  padding-bottom: 50px;
 `;
 
 function Movie() {
@@ -53,15 +57,15 @@ function Movie() {
       <Helmet>
         <title>영화 - 넷플릭스</title>
       </Helmet>
-      <Wrapper
+      <Main
         className={`wraaper ${movieMatch ? "preview-modal_active" : ""}`}
         style={{ top: movieMatch ? `-${scrollY}px` : "" }}
       >
         {allQueriesLoaded ? (
-          <main style={{ paddingBottom: "50px" }}>
+          <MainContainer>
             {popular[0].data ? (
               <>
-                <MainMovie
+                <HeaderMovie
                   content="movie"
                   category="popular"
                   movieId={popular[0].data.results[0].id}
@@ -158,12 +162,12 @@ function Movie() {
                 movieId={popular[9].data.results.map((movie) => movie.id)}
               />
             ) : null}
-          </main>
+          </MainContainer>
         ) : (
           <Loading />
         )}
         <Footer />
-      </Wrapper>
+      </Main>
 
       {movieMatch ? (
         <ModalPreveiw

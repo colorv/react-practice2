@@ -1,14 +1,10 @@
-# React Practice - NETFILX CLONE
+# Netflix Clone
 
----
+<img width="1297" alt="mainImg" src="https://github.com/colorv/react-practice2/assets/75740740/3ceff75a-5793-4960-ba29-b0bd7fd4a8e5">
 
-# 스크린샷 붙이기
-
----
-
-## page link
-
-링크 : [https://colorv.github.io/react-practice2/]
+<p align="center">
+<a href="https://colorv.github.io/react-practice2/">바로가기</a>
+</p>
 
 ## 생각, 고민
 
@@ -27,12 +23,16 @@
 
 1. pagination 버그 : 6에서 4로 갔을때
 2. 슬라이더 이동을 한번이라도 하면 화면 사이즈를 줄일때 따라 움직임
-3. API요청해서 받은 Data에 img가 없는 경우도 있어서 슬라이더에 img가 없이 표시됌
+3. API요청해서 받은 Data에 img가 없는 경우에도 img없이 자리를 차지함
 4. 슬라이더에 item hover시 translateX로 인해 z-index 작동하지 않음
 5. 슬라이더 이동시 픽셀 값이 조금 씩 안맞게 이동함
 6. page 하단 부분에서 item 클릭시 preview page가 뜨고 page 나갈시 scrolly 값이 위로 튐
 7. 슬라이더 Item hover 부자연스러움
 8. https://colorv.github.io/react-practice2/ : path 수정해야함
+9. 반응형
+   1. Main Movie 화면 줄어 들었을때 overView 없애거나 줄 수를 줄이기
+   2. Header - 화면 줄어 들었을때 "메뉴"로 통합시키기
+10. backDrop_img 없는 item은 텍스트로 표시하기
 
 # 추가하기
 

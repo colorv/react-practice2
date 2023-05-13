@@ -26,7 +26,7 @@ import {
   ThumbsUp,
 } from "./Icons";
 
-const Slider = styled.div`
+const Slider = styled.section`
   width: 100vw;
   margin: 3vw 0;
   position: relative;
@@ -92,12 +92,12 @@ const Main = styled.div`
     display: initial;
   }
 `;
-const MovieList = styled(motion.div)`
+const MovieList = styled(motion.ul)`
   white-space: nowrap;
   width: 100%;
 `;
 
-const Movie = styled.div`
+const Movie = styled.li`
   display: inline-block;
   width: 16.2%;
 

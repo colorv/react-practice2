@@ -14,12 +14,17 @@ import Loading from "../Components/Loading";
 
 const BASE_PATH = "/latest";
 
-const Wrapper = styled.div`
+const Main = styled.main`
   padding-bottom: 50px;
   overflow-x: hidden;
   &.preview-modal_active {
     position: fixed;
   }
+`;
+
+const MainContainer = styled.div`
+  padding-bottom: 50px;
+  padding-top: 68px;
 `;
 
 function Latest() {
@@ -52,12 +57,12 @@ function Latest() {
       <Helmet>
         <title>넷플릭스</title>
       </Helmet>
-      <Wrapper
+      <Main
         className={`wraaper ${movieMatch ? "preview-modal_active" : ""}`}
         style={{ top: movieMatch ? `-${scrollY}px` : "" }}
       >
         {allQueriesLoaded ? (
-          <main style={{ paddingBottom: "50px", paddingTop: "68px" }}>
+          <MainContainer>
             {popular[0].data ? (
               <MovieSlider
                 title="넷플릭스의 새로운 콘텐츠"
@@ -114,12 +119,12 @@ function Latest() {
                 movieId={popular[5].data.results.map((movie) => movie.id)}
               />
             ) : null}
-          </main>
+          </MainContainer>
         ) : (
           <Loading />
         )}
         <Footer />
-      </Wrapper>
+      </Main>
 
       {movieMatch ? (
         <ModalPreveiw
