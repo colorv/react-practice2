@@ -16,5 +16,11 @@
     "noEmit": true,
     "jsx": "react-jsx"
   },
-  "include": ["src", "test/TestSlider.tsx", "test/ModalMini.tsx"]
+  "include": [
+    "src",
+    "test/TestSlider.tsx",
+    "test/ModalMini.tsx",
+    "test/Test.tsx",
+    "test/TestSlider2.tsx"
+  ]
 }
