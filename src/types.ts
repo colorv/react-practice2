@@ -53,6 +53,10 @@ export interface FilmRatingIconProps {
   footer?: boolean;
 }
 
+export interface NumberIconProps {
+  iconNumber: number;
+}
+
 // API - fetch Result
 interface Movie {
   id: number;
@@ -109,6 +113,7 @@ export interface SimilarMovies extends Movie {
   images: {
     backdrops: Images[];
     logos: Images[];
+    posters: Images[];
   };
   release_dates: {
     results: ReleaseDates[];
