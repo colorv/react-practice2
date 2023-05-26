@@ -12,6 +12,7 @@ import MovieSlider from "../Components/MovieSlider";
 import HeaderMovie from "../Components/HeaderMovie";
 import Footer from "../Components/Footer";
 import Loading from "../Components/Loading";
+import VerticalMovieSlider from "../Components/VerticalMovieSlider";
 
 const BASE_PATH = "/";
 
@@ -70,6 +71,7 @@ function Home() {
                   category="now_playing"
                   movieId={nowPlaying[0].data.results[0].id}
                 />
+
                 <MovieSlider
                   title="지난 1년간 공개된 콘텐츠"
                   content="movie"
@@ -81,7 +83,7 @@ function Home() {
             ) : null}
 
             {nowPlaying[1].data ? (
-              <MovieSlider
+              <VerticalMovieSlider
                 title="회원님을 위한 오늘의 특선"
                 content="movie"
                 category="now_playing"
