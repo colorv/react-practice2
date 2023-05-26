@@ -54,7 +54,7 @@ export interface FilmRatingIconProps {
 }
 
 export interface NumberIconProps {
-  iconNumber: number;
+  iconNumber?: number;
 }
 
 // API - fetch Result

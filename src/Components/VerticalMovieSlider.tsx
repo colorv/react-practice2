@@ -129,17 +129,15 @@ const MovieImg = styled.img`
   top: 0;
   right: 0;
   bottom: 0;
-  /* left: 0; */
   position: absolute;
-  /* width: 100%; */
-  /* width: 50%; */
+
   &.hover-movie-img {
     width: 100%;
     left: 0;
   }
   &.poster {
     height: 100%;
-    width: 55%;
+    width: 52.5%;
   }
 `;
 
@@ -215,7 +213,6 @@ const HoverMovie = styled(motion.div)`
   top: 0;
   background-color: ${({ theme }) => theme.black.bgColor};
   width: 97%;
-  /* min-width: 227px; */
   box-shadow: 0px 2px 10px rgba(0, 0, 0, 0.4);
   border-radius: 6px;
   z-index: 3;
@@ -416,6 +413,10 @@ function VerticalMovieSlider<T extends Content>({
   const setPreviewActive = useSetRecoilState(previewState);
   const setScrollY = useSetRecoilState(scorllState);
 
+  const movieRanking = movieId.slice(0, 10).map((id, index) => {
+    return { ranking: index + 1, id };
+  });
+
   const movies: UseQueryResult<SimilarMovies>[] = useQueries(
     newMovieIds.map((id) => {
       return {
@@ -430,10 +431,10 @@ function VerticalMovieSlider<T extends Content>({
 
   const toggleAnimationEnd = () => setAnimationEnd((prev) => !prev);
   const paginate = (newDirection: number, moviesLength: number) => {
+    const maxIndex = Math.ceil(moviesLength / offset) - 1;
     if (animationEnd) return;
     if (btnHide) setBtnHide(false);
 
-    const maxIndex = Math.ceil(moviesLength / offset) - 1;
     if (newDirection > 0) {
       if (newMovieIds.length % offset !== 0) {
         setNewMovieIds(() => {
@@ -639,13 +640,18 @@ function VerticalMovieSlider<T extends Content>({
                         index < offset + 2 ? index : ""
                       } `}
                     >
-                      <NumberIcon iconNumber={index} />
+                      <NumberIcon
+                        iconNumber={
+                          movieRanking.find(({ id }) => id === movie.data?.id)
+                            ?.ranking
+                        }
+                      />
                       <MovieImgWrapper
                         onClick={() =>
                           onClickPreview(movie.data?.id, scrollY.get())
                         }
                       >
-                        {movie.data?.images.backdrops.length !== 0 ? (
+                        {movie.data?.images.posters.length !== 0 ? (
                           <MovieImg
                             src={getImage(
                               movie.data?.images.posters[0].file_path,
@@ -654,7 +660,7 @@ function VerticalMovieSlider<T extends Content>({
                             className="poster"
                           />
                         ) : (
-                          // 수정 필요
+                          // 수정 필요 -> MovieImg 대신 텍스트만 있는 이미지 만들기
                           <MovieImg
                             src={getImage(movie.data?.backdrop_path, "w500")}
                           />
@@ -676,9 +682,7 @@ function VerticalMovieSlider<T extends Content>({
                             }
                             animate="animate"
                             exit="exit"
-                            // key={hoverId}
                             onMouseLeave={resetHoverState}
-                            // position={"0"}
                           >
                             <MovieImgWrapper
                               className="mini-modal-img"
@@ -695,7 +699,7 @@ function VerticalMovieSlider<T extends Content>({
                                   className="hover-movie-img"
                                 />
                               ) : (
-                                // 수정 필요
+                                // 수정 필요 -> MovieImg 대신 텍스트만 있는 이미지 만들기
                                 <MovieImg
                                   src={getImage(
                                     movie.data?.backdrop_path,
