@@ -18,9 +18,9 @@ const NumberSvg = styled.svg`
     stroke: #595959;
     stroke-width: 10px;
   }
-  /* &:last-child {
+  &:nth-child(2) {
     left: 30%;
-  } */
+  }
 `;
 
 const FilmRatings = styled.div`
@@ -473,16 +473,21 @@ export function NumberIcon({ iconNumber }: NumberIconProps) {
 
   return (
     <div>
-      {/* number 값이 있을경우만 출력하게 하기 */}
+      {number?.key === 10 ? (
+        <NumberSvg
+          xmlns="http://www.w3.org/2000/svg"
+          viewBox={numbers[0].viewBox}
+        >
+          {/* <!--! Font Awesome Pro 6.4.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license (Commercial License) Copyright 2023 Fonticons, Inc. --> */}
+          <path d={numbers[0].d} />
+        </NumberSvg>
+      ) : null}
       {number ? (
         <NumberSvg xmlns="http://www.w3.org/2000/svg" viewBox={number.viewBox}>
           {/* <!--! Font Awesome Pro 6.4.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license (Commercial License) Copyright 2023 Fonticons, Inc. --> */}
           <path d={number.d} />
         </NumberSvg>
-      ) : (
-        <></>
-      )}
-      {/* {조건 - 숫자 10일 경우 아이콘 2개사용하기} */}
+      ) : null}
     </div>
   );
 }
