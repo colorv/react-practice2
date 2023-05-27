@@ -22,7 +22,7 @@ const NavContainer = styled(motion.nav)`
   font-size: 14px;
   padding: 0 4%;
   box-sizing: border-box;
-  z-index: 2;
+  z-index: 99;
 `;
 
 const Column = styled.div`
