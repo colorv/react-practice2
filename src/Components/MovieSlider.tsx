@@ -130,6 +130,28 @@ const MovieImg = styled.img`
   left: 0;
   position: absolute;
   width: 100%;
+  z-index: 2;
+`;
+
+const MovieTitle = styled.div`
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  position: absolute;
+  height: 100%;
+  width: 100%;
+  background-color: black;
+  border-radius: 3px;
+
+  & span {
+    width: 100%;
+    white-space: normal;
+    text-align: center;
+    color: ${({ theme }) => theme.white.hover};
+  }
 `;
 
 // Slider Handle (left,right)
@@ -140,7 +162,7 @@ const SliderHandle = styled(motion.span)`
   text-align: center;
   position: absolute;
   background: hsla(0, 0%, 8%, 0.5);
-  z-index: 1;
+  z-index: 3;
   width: 4%;
   top: 0;
   bottom: 0;
@@ -645,6 +667,9 @@ function MovieSlider<T extends Content>({
                             src={getImage(movie.data?.backdrop_path, "w500")}
                           />
                         )}
+                        <MovieTitle>
+                          <span>{movie.data?.title}</span>
+                        </MovieTitle>
                       </MovieImgWrapper>
 
                       <AnimatePresence>
@@ -687,6 +712,9 @@ function MovieSlider<T extends Content>({
                                   )}
                                 />
                               )}
+                              <MovieTitle>
+                                <span>{movie.data?.title}</span>
+                              </MovieTitle>
                             </MovieImgWrapper>
                             <MovieInfo variants={hoverVariants} exit="hidden">
                               <BtnContainer>
