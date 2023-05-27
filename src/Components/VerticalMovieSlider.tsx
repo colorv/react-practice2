@@ -130,7 +130,8 @@ const MovieImg = styled.img`
   right: 0;
   bottom: 0;
   position: absolute;
-
+  border-radius: 3px;
+  z-index: 2;
   &.hover-movie-img {
     width: 100%;
     left: 0;
@@ -138,6 +139,35 @@ const MovieImg = styled.img`
   &.poster {
     height: 100%;
     width: 52.5%;
+  }
+  &.backdrop {
+    height: 100%;
+    width: 52.5%;
+    object-fit: cover;
+  }
+`;
+
+const MovieTitle = styled.div`
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  position: absolute;
+  height: 100%;
+  width: 52.5%;
+  background-color: black;
+  border-radius: 3px;
+
+  &.hover-movie-title {
+    width: 100%;
+  }
+  & span {
+    width: 100%;
+    white-space: normal;
+    text-align: center;
+    color: ${({ theme }) => theme.white.hover};
   }
 `;
 
@@ -149,7 +179,7 @@ const SliderHandle = styled(motion.span)`
   text-align: center;
   position: absolute;
   background: hsla(0, 0%, 8%, 0.5);
-  z-index: 1;
+  z-index: 3;
   width: 4%;
   top: 0;
   bottom: 0;
@@ -660,11 +690,16 @@ function VerticalMovieSlider<T extends Content>({
                             className="poster"
                           />
                         ) : (
-                          // 수정 필요 -> MovieImg 대신 텍스트만 있는 이미지 만들기
                           <MovieImg
                             src={getImage(movie.data?.backdrop_path, "w500")}
+                            className={
+                              movie.data.backdrop_path ? "backdrop" : ""
+                            }
                           />
                         )}
+                        <MovieTitle>
+                          <span>{movie.data?.title}</span>
+                        </MovieTitle>
                       </MovieImgWrapper>
 
                       <AnimatePresence>
@@ -699,14 +734,17 @@ function VerticalMovieSlider<T extends Content>({
                                   className="hover-movie-img"
                                 />
                               ) : (
-                                // 수정 필요 -> MovieImg 대신 텍스트만 있는 이미지 만들기
                                 <MovieImg
                                   src={getImage(
                                     movie.data?.backdrop_path,
                                     "w500"
                                   )}
+                                  className="hover-movie-img"
                                 />
                               )}
+                              <MovieTitle className="hover-movie-title">
+                                <span>{movie.data?.title}</span>
+                              </MovieTitle>
                             </MovieImgWrapper>
                             <MovieInfo variants={hoverVariants} exit="hidden">
                               <BtnContainer>
