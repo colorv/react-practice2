@@ -29,7 +29,7 @@ const PreviewOverlay = styled(motion.div)`
   background-color: rgba(0, 0, 0, 0.7);
   position: fixed;
   top: 0;
-  z-index: 3;
+  z-index: 99;
 `;
 
 const PreviewModal = styled(motion.div)`
@@ -42,7 +42,7 @@ const PreviewModal = styled(motion.div)`
   top: 30px;
   left: 0;
   right: 0;
-  z-index: 3;
+  z-index: 99;
   overflow: hidden;
   font-size: 14px;
 `;
@@ -81,6 +81,19 @@ const PreviewImg = styled.img`
   border-top-left-radius: 10px;
   border-top-right-radius: 10px;
   z-index: -1;
+`;
+
+const PreviewNoImg = styled.div`
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(0deg, #181818, transparent 15%);
+  background-color: rgba(255, 255, 255, 0.05);
+  color: rgba(255, 255, 255, 0.5);
+  font-size: 1.5rem;
+  position: absolute;
 `;
 
 const PreviewImgShadow = styled.div`
@@ -455,7 +468,13 @@ function ModalPreveiw({ content, movieId }: PreviewProps) {
               style={{ position: "relative" }}
               className="preview-header"
             >
-              <PreviewImg src={getImage(data.backdrop_path, "w780")} />
+              {data.backdrop_path ? (
+                <PreviewImg src={getImage(data.backdrop_path, "w780")} />
+              ) : (
+                <PreviewNoImg>
+                  <span>등록된 이미지가 없습니다.</span>
+                </PreviewNoImg>
+              )}
 
               <LogoContainer className="logo-container">
                 {data.images.logos.length !== 0 ? (
