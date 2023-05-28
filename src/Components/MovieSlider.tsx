@@ -152,6 +152,19 @@ const MovieTitle = styled.div`
     text-align: center;
     color: ${({ theme }) => theme.white.hover};
   }
+
+  &.no-logo {
+    & span {
+      padding: 10px 0;
+      z-index: 3;
+      color: white;
+      position: absolute;
+      bottom: 0;
+      text-shadow: 3px 3px 5px black;
+      background: linear-gradient(0deg, rgba(0, 0, 0, 0.4), #0000 100%);
+      /* background-color: black; */
+    }
+  }
 `;
 
 // Slider Handle (left,right)
@@ -229,7 +242,7 @@ const HoverMovie = styled(motion.div)`
   /* min-width: 227px; */
   box-shadow: 0px 2px 10px rgba(0, 0, 0, 0.4);
   border-radius: 6px;
-  z-index: 3;
+  z-index: 5;
 `;
 
 const MovieInfo = styled(motion.div)`
@@ -667,7 +680,14 @@ function MovieSlider<T extends Content>({
                             src={getImage(movie.data?.backdrop_path, "w500")}
                           />
                         )}
-                        <MovieTitle>
+                        <MovieTitle
+                          className={`${
+                            movie.data?.images.backdrops.length === 0 &&
+                            movie.data?.backdrop_path
+                              ? "no-logo"
+                              : ""
+                          }`}
+                        >
                           <span>{movie.data?.title}</span>
                         </MovieTitle>
                       </MovieImgWrapper>
