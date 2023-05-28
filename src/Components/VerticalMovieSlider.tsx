@@ -245,7 +245,7 @@ const HoverMovie = styled(motion.div)`
   width: 97%;
   box-shadow: 0px 2px 10px rgba(0, 0, 0, 0.4);
   border-radius: 6px;
-  z-index: 3;
+  z-index: 5;
 `;
 
 const MovieInfo = styled(motion.div)`
