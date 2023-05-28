@@ -88,6 +88,39 @@ const MovieImg = styled.img`
   bottom: 0;
   position: absolute;
   width: 100%;
+  z-index: 2;
+`;
+
+const MovieTitle = styled.div`
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  position: absolute;
+  height: 100%;
+  width: 100%;
+  background-color: black;
+  border-radius: 3px;
+
+  & span {
+    width: 100%;
+    white-space: normal;
+    text-align: center;
+    color: ${({ theme }) => theme.white.hover};
+  }
+  &.no-logo {
+    & span {
+      padding: 10px 0;
+      z-index: 3;
+      color: white;
+      position: absolute;
+      bottom: 0;
+      text-shadow: 3px 3px 5px black;
+      background: linear-gradient(0deg, rgba(0, 0, 0, 0.4), #0000 100%);
+    }
+  }
 `;
 
 // Hover Movie
@@ -98,7 +131,7 @@ const HoverMovie = styled(motion.div)`
   width: 97%;
   box-shadow: 0px 2px 10px rgba(0, 0, 0, 0.4);
   border-radius: 6px;
-  z-index: 2;
+  z-index: 5;
 `;
 
 const MovieInfo = styled(motion.div)`
@@ -323,6 +356,16 @@ function MovieList<T extends Content>({
                       src={getImage(movie.data?.backdrop_path, "w500")}
                     />
                   )}
+                  <MovieTitle
+                    className={`${
+                      movie.data?.images.backdrops.length === 0 &&
+                      movie.data?.backdrop_path
+                        ? "no-logo"
+                        : ""
+                    }`}
+                  >
+                    <span>{movie.data?.title}</span>
+                  </MovieTitle>
                 </MovieImgWrapper>
 
                 <AnimatePresence>
@@ -351,6 +394,9 @@ function MovieList<T extends Content>({
                             src={getImage(movie.data?.backdrop_path, "w500")}
                           />
                         )}
+                        <MovieTitle>
+                          <span>{movie.data?.title}</span>
+                        </MovieTitle>
                       </MovieImgWrapper>
                       <MovieInfo variants={hoverVariants} exit="hidden">
                         <BtnContainer>
