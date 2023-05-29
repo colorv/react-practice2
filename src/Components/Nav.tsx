@@ -4,10 +4,10 @@ import { Link, useMatch } from "react-router-dom";
 import { useRecoilValue, useSetRecoilState } from "recoil";
 import styled from "styled-components";
 import { previewState, scorllState } from "../atoms";
+import { NavMenuIcon } from "./Icons";
 
 const NavContainer = styled(motion.nav)`
   display: flex;
-  justify-content: space-between;
   align-items: center;
   width: 100%;
   height: 68px;
@@ -19,7 +19,8 @@ const NavContainer = styled(motion.nav)`
   );
   color: white;
   position: fixed;
-  font-size: 14px;
+  font-size: 0.5rem;
+  // 최대화면 font-size 14px
   padding: 0 4%;
   box-sizing: border-box;
   z-index: 4;
@@ -27,34 +28,90 @@ const NavContainer = styled(motion.nav)`
 
 const Column = styled.div`
   display: flex;
+  &.column3 {
+    display: flex;
+    justify-content: flex-end;
+    position: absolute;
+    right: 4%;
+  }
 `;
 
 const LogoWrapper = styled.div``;
 
 const Logo = styled(motion.svg)`
-  margin-right: 45px;
-  width: 95px;
-  height: 25px;
+  width: 7vw;
   fill: ${({ theme }) => theme.red};
 `;
 
-const Links = styled.ul`
+const Menu = styled.div`
+  &:hover {
+    .menu-links {
+      display: flex;
+    }
+  }
+`;
+
+const MenuTitle = styled.h2`
   display: flex;
+  cursor: pointer;
+  & span:first-child {
+    margin-left: 20px;
+  }
+  & span:last-child {
+    display: flex;
+    width: 1.5vw;
+    height: 1.5vw;
+    margin-left: 5px;
+  }
+`;
+
+const MenuCursor = styled.div`
+  display: flex;
+  justify-content: center;
+  width: 100%;
+  border-bottom: 2px solid white;
+`;
+
+const CursorShape = styled.div`
+  width: 0px;
+  height: 0px;
+  border-bottom: 9px solid white;
+  border-left: 8px solid transparent;
+  border-right: 8px solid transparent;
+`;
+
+const Links = styled.ul`
+  display: none;
   align-items: center;
+  &.menu-links {
+    flex-direction: column;
+    position: absolute;
+    top: 100%;
+    left: 4%;
+  }
 `;
 
 const Item = styled.li`
   display: flex;
   justify-content: center;
-  margin-right: 20px;
+  margin-left: 20px;
   color: ${({ theme }) => theme.white.darker};
+  background-color: rgba(0, 0, 0, 0.9);
 
   position: relative;
   &:hover {
     color: ${({ theme }) => theme.white.hover};
+    background-color: rgba(0, 0, 0, 0.8);
   }
   &.selected {
     border-bottom: 1.5px solid white;
+  }
+  &.menu-item {
+    align-items: center;
+    width: 260px;
+    height: 50px;
+    margin-left: 0px;
+    font-size: 13px;
   }
 `;
 
@@ -123,8 +180,8 @@ function Nav() {
   const navAnimation = useAnimation();
   const { scrollY } = useScroll();
   const setScrollY = useSetRecoilState(scorllState);
-
   const previewActive = useRecoilValue(previewState);
+  const [screenWidth, setScreenWidth] = useState(0);
 
   const searchClick = () => {
     if (searchOpen) {
@@ -146,6 +203,10 @@ function Nav() {
   const resetScrollY = () => {
     setScrollY(0);
   };
+  const onResize = () => {
+    const width = window.innerWidth;
+    setScreenWidth(width);
+  };
 
   useEffect(() => {
     if (previewActive === false) {
@@ -164,6 +225,16 @@ function Nav() {
     }
   }, [scrollY, navAnimation, previewActive]);
 
+  useEffect(() => {
+    window.addEventListener("resize", onResize);
+    return () => {
+      window.removeEventListener("resize", onResize);
+    };
+  }, []);
+  useEffect(() => {
+    onResize();
+  }, []);
+  // window.innerwidth < 885 -> 메뉴 버튼 활성화
   return (
     <NavContainer variants={navVariants} animate={navAnimation} className="nav">
       <Column className="column1">
@@ -178,53 +249,112 @@ function Nav() {
             <motion.path d="M140.803 258.904c-15.404 2.705-31.079 3.516-47.294 5.676l-49.458-144.856v151.073c-15.404 1.621-29.457 3.783-44.051 5.945v-276.742h41.08l56.212 157.021v-157.021h43.511v258.904zm85.131-157.558c16.757 0 42.431-.811 57.835-.811v43.24c-19.189 0-41.619 0-57.835.811v64.322c25.405-1.621 50.809-3.785 76.482-4.596v41.617l-119.724 9.461v-255.39h119.724v43.241h-76.482v58.105zm237.284-58.104h-44.862v198.908c-14.594 0-29.188 0-43.239.539v-199.447h-44.862v-43.242h132.965l-.002 43.242zm70.266 55.132h59.187v43.24h-59.187v98.104h-42.433v-239.718h120.808v43.241h-78.375v55.133zm148.641 103.507c24.594.539 49.456 2.434 73.51 3.783v42.701c-38.646-2.434-77.293-4.863-116.75-5.676v-242.689h43.24v201.881zm109.994 49.457c13.783.812 28.377 1.623 42.43 3.242v-254.58h-42.43v251.338zm231.881-251.338l-54.863 131.615 54.863 145.127c-16.217-2.162-32.432-5.135-48.648-7.838l-31.078-79.994-31.617 73.51c-15.678-2.705-30.812-3.516-46.484-5.678l55.672-126.75-50.269-129.992h46.482l28.377 72.699 30.27-72.699h47.295z" />
           </Logo>
         </LogoWrapper>
-
-        <Links className="nav-links">
-          <Item>
-            <Link to="/" onClick={resetScrollY}>
-              {homeMatch ? <ItemText>홈</ItemText> : "홈"}
-            </Link>
-          </Item>
-          <Item>
-            <Link to="/series" onClick={resetScrollY}>
-              {seriesMatch ? <ItemText>시리즈</ItemText> : "시리즈"}
-            </Link>
-          </Item>
-          <Item>
-            <Link to="/movies" onClick={resetScrollY}>
-              {movieMatch ? <ItemText>영화</ItemText> : "영화"}
-            </Link>
-          </Item>
-          <Item>
-            <Link to="/latest" onClick={resetScrollY}>
-              {latestMatch ? (
-                <ItemText>NEW! 요즘 대세 콘텐츠</ItemText>
-              ) : (
-                "NEW! 요즘 대세 콘텐츠"
-              )}
-            </Link>
-          </Item>
-          <Item>
-            <Link to="/my-list" onClick={resetScrollY}>
-              {myListMatch ? (
-                <ItemText>내가 찜한 콘텐츠</ItemText>
-              ) : (
-                "내가 찜한 콘텐츠"
-              )}
-            </Link>
-          </Item>
-          <Item>
-            <Link to="/original-audio" onClick={resetScrollY}>
-              {originalAudioMatch ? (
-                <ItemText>언어별로 찾아보기</ItemText>
-              ) : (
-                "언어별로 찾아보기"
-              )}
-            </Link>
-          </Item>
-        </Links>
       </Column>
       <Column className="column2">
+        {screenWidth < 885 ? (
+          <Menu>
+            <MenuTitle>
+              <span>메뉴</span>
+              <span>
+                <NavMenuIcon />
+              </span>
+            </MenuTitle>
+            <Links className="menu-links">
+              <MenuCursor>
+                <CursorShape />
+              </MenuCursor>
+              <Item className="menu-item">
+                <Link to="/" onClick={resetScrollY}>
+                  {homeMatch ? <ItemText>홈</ItemText> : "홈"}
+                </Link>
+              </Item>
+              <Item className="menu-item">
+                <Link to="/series" onClick={resetScrollY}>
+                  {seriesMatch ? <ItemText>시리즈</ItemText> : "시리즈"}
+                </Link>
+              </Item>
+              <Item className="menu-item">
+                <Link to="/movies" onClick={resetScrollY}>
+                  {movieMatch ? <ItemText>영화</ItemText> : "영화"}
+                </Link>
+              </Item>
+              <Item className="menu-item">
+                <Link to="/latest" onClick={resetScrollY}>
+                  {latestMatch ? (
+                    <ItemText>NEW! 요즘 대세 콘텐츠</ItemText>
+                  ) : (
+                    "NEW! 요즘 대세 콘텐츠"
+                  )}
+                </Link>
+              </Item>
+              <Item className="menu-item">
+                <Link to="/my-list" onClick={resetScrollY}>
+                  {myListMatch ? (
+                    <ItemText>내가 찜한 콘텐츠</ItemText>
+                  ) : (
+                    "내가 찜한 콘텐츠"
+                  )}
+                </Link>
+              </Item>
+              <Item className="menu-item">
+                <Link to="/original-audio" onClick={resetScrollY}>
+                  {originalAudioMatch ? (
+                    <ItemText>언어별로 찾아보기</ItemText>
+                  ) : (
+                    "언어별로 찾아보기"
+                  )}
+                </Link>
+              </Item>
+            </Links>
+          </Menu>
+        ) : (
+          <Links className="nav-links">
+            <Item>
+              <Link to="/" onClick={resetScrollY}>
+                {homeMatch ? <ItemText>홈</ItemText> : "홈"}
+              </Link>
+            </Item>
+            <Item>
+              <Link to="/series" onClick={resetScrollY}>
+                {seriesMatch ? <ItemText>시리즈</ItemText> : "시리즈"}
+              </Link>
+            </Item>
+            <Item>
+              <Link to="/movies" onClick={resetScrollY}>
+                {movieMatch ? <ItemText>영화</ItemText> : "영화"}
+              </Link>
+            </Item>
+            <Item>
+              <Link to="/latest" onClick={resetScrollY}>
+                {latestMatch ? (
+                  <ItemText>NEW! 요즘 대세 콘텐츠</ItemText>
+                ) : (
+                  "NEW! 요즘 대세 콘텐츠"
+                )}
+              </Link>
+            </Item>
+            <Item>
+              <Link to="/my-list" onClick={resetScrollY}>
+                {myListMatch ? (
+                  <ItemText>내가 찜한 콘텐츠</ItemText>
+                ) : (
+                  "내가 찜한 콘텐츠"
+                )}
+              </Link>
+            </Item>
+            <Item>
+              <Link to="/original-audio" onClick={resetScrollY}>
+                {originalAudioMatch ? (
+                  <ItemText>언어별로 찾아보기</ItemText>
+                ) : (
+                  "언어별로 찾아보기"
+                )}
+              </Link>
+            </Item>
+          </Links>
+        )}
+      </Column>
+      <Column className="column3">
         <Search animate={searchAnimation} className="search">
           {searchOpen ? (
             <SearchInput
