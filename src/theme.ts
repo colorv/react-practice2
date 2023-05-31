@@ -20,4 +20,9 @@ export const theme: DefaultTheme = {
     default: "#4d4d4d",
     selected: "#aaaaaa",
   },
+  nav: {
+    default: "#cacaca",
+    focus: "#ffffff",
+    hover: "#989898",
+  },
 };

@@ -21,5 +21,10 @@ declare module "styled-components" {
       default: string;
       selected: string;
     };
+    nav: {
+      default: string;
+      focus: string;
+      hover: string;
+    };
   }
 }
