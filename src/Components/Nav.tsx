@@ -12,6 +12,7 @@ const NavContainer = styled(motion.nav)`
   width: 100%;
   height: 68px;
   top: 0;
+  font-size: 1vw;
   background-image: linear-gradient(
     180deg,
     rgba(0, 0, 0, 0.7) 10%,
@@ -19,11 +20,19 @@ const NavContainer = styled(motion.nav)`
   );
   color: white;
   position: fixed;
-  font-size: 0.5rem;
-  // 최대화면 font-size 14px
+
   padding: 0 4%;
   box-sizing: border-box;
   z-index: 4;
+  @media screen and (max-width: 949px) {
+    height: 41px;
+  }
+  @media screen and (min-width: 1200px) {
+    font-size: 14px;
+  }
+  @media screen and (min-width: 1500px) {
+    padding: 0px 60px;
+  }
 `;
 
 const Column = styled.div`
@@ -41,6 +50,22 @@ const LogoWrapper = styled.div``;
 const Logo = styled(motion.svg)`
   width: 7vw;
   fill: ${({ theme }) => theme.red};
+
+  @media screen and (max-width: 730px) {
+    min-width: 40px;
+  }
+  @media screen and (min-width: 731px) and (max-width: 840px) {
+    min-width: 58px;
+  }
+  @media screen and (min-width: 840px) and (max-width: 950px) {
+    min-width: 58px;
+  }
+  @media screen and (min-width: 950px) {
+    width: 92.5px;
+  }
+  @media screen and (min-width: 1100px) {
+    margin-right: 25px;
+  }
 `;
 
 const Menu = styled.div`
@@ -81,7 +106,7 @@ const CursorShape = styled.div`
 `;
 
 const Links = styled.ul`
-  display: none;
+  display: flex;
   align-items: center;
   &.menu-links {
     flex-direction: column;
@@ -96,22 +121,24 @@ const Item = styled.li`
   justify-content: center;
   margin-left: 20px;
   color: ${({ theme }) => theme.white.darker};
-  background-color: rgba(0, 0, 0, 0.9);
 
   position: relative;
   &:hover {
     color: ${({ theme }) => theme.white.hover};
-    background-color: rgba(0, 0, 0, 0.8);
   }
   &.selected {
     border-bottom: 1.5px solid white;
   }
   &.menu-item {
+    background-color: rgba(0, 0, 0, 0.9);
     align-items: center;
     width: 260px;
     height: 50px;
     margin-left: 0px;
     font-size: 13px;
+    :hover {
+      background-color: rgba(0, 0, 0, 0.8);
+    }
   }
 `;
 
