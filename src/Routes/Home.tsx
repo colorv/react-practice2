@@ -13,6 +13,7 @@ import HeaderMovie from "../Components/HeaderMovie";
 import Footer from "../Components/Footer";
 import Loading from "../Components/Loading";
 import VerticalMovieSlider from "../Components/VerticalMovieSlider";
+import AllMovie from "../Components/AllMovie";
 
 const BASE_PATH = "/";
 
@@ -134,11 +135,17 @@ function Home() {
         <Footer />
       </Main>
 
-      {movieMatch ? (
+      {movieMatch?.params.movieId &&
+      /^[0-9]+$/.test(movieMatch.params.movieId) ? (
         <ModalPreveiw
           content="movie"
           movieId={Number(movieMatch.params.movieId)}
         />
+      ) : null}
+
+      {movieMatch?.params.movieId &&
+      /^all-movie$/.test(movieMatch.params.movieId) ? (
+        <AllMovie />
       ) : null}
     </>
   );
