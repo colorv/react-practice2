@@ -1,11 +1,10 @@
 import styled from "styled-components";
 import { useMatch } from "react-router-dom";
 import { useRecoilValue } from "recoil";
-import { scorllState } from "../atoms";
+import { scorllState } from "../store/atoms";
 import { Helmet } from "react-helmet";
-import Footer from "../Components/Footer";
-
-const BASE_PATH = "/search";
+import Footer from "../components/Footer";
+import { PATH } from "../constants/path";
 
 const Wrapper = styled.div`
   &.preview-modal_active {
@@ -23,7 +22,7 @@ const EmptyPage = styled.div`
 function Search() {
   // const path = useLocation();
   // const setCurrentPath = useSetRecoilState(pathState);
-  const movieMatch = useMatch(`${BASE_PATH}/:movieId`);
+  const movieMatch = useMatch(`${PATH.SEARCH}/:movieId`);
   const scrollY = useRecoilValue(scorllState);
   return (
     <>

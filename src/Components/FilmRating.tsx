@@ -1,5 +1,5 @@
-import { Certification, FilmRatingProps, ReleaseDates } from "../types";
-import { DefaultFilmRatings, FilmRatingIcon } from "./Icons";
+import { Certification, FilmRatingProps, ReleaseDates } from "../common/types";
+import { DefaultFilmRatings, FilmRatingIcon } from "../icons/Icons";
 
 function FilmRating({ ratingResult, hasText }: FilmRatingProps) {
   const FilmRatingHandle = (
@@ -21,8 +21,8 @@ function FilmRating({ ratingResult, hasText }: FilmRatingProps) {
     if (filmRatings?.certification !== undefined) {
       if (
         filmRatings.certification.toUpperCase() === "ALL" ||
-        filmRatings.certification === "전체 관람가" ||
-        filmRatings.certification === "전체관람가"
+        "전체 관람가" ||
+        "전체관람가"
       ) {
         if (hasText)
           return (
@@ -34,8 +34,8 @@ function FilmRating({ ratingResult, hasText }: FilmRatingProps) {
       }
       if (
         filmRatings.certification === "12" ||
-        filmRatings.certification === "12세 이상 관람가" ||
-        filmRatings.certification === "12세이상관람가"
+        "12세 이상 관람가" ||
+        "12세이상관람가"
       ) {
         if (hasText)
           return (
@@ -48,8 +48,8 @@ function FilmRating({ ratingResult, hasText }: FilmRatingProps) {
       }
       if (
         filmRatings.certification === "15" ||
-        filmRatings.certification === "15세 이상 관람가" ||
-        filmRatings.certification === "15세이상관람가"
+        "15세 이상 관람가" ||
+        "15세이상관람가"
       ) {
         if (hasText)
           return (
@@ -62,8 +62,8 @@ function FilmRating({ ratingResult, hasText }: FilmRatingProps) {
       }
       if (
         filmRatings.certification === "18" ||
-        filmRatings.certification === "18세 이상 관람가" ||
-        filmRatings.certification === "18세이상관람가"
+        "18세 이상 관람가" ||
+        "18세이상관람가"
       ) {
         if (hasText)
           return (

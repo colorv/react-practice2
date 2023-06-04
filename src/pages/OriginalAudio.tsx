@@ -2,17 +2,16 @@ import styled from "styled-components";
 import { useLocation, useMatch } from "react-router-dom";
 import { useEffect, useState } from "react";
 import { useQueries, UseQueryResult } from "react-query";
-import { getMovies } from "../api";
+import { getMovies } from "../services/api";
 import { useRecoilValue, useSetRecoilState } from "recoil";
-import { pathState, scorllState } from "../atoms";
-import { Movies } from "../types";
+import { pathState, scorllState } from "../store/atoms";
+import { Movies } from "../common/types";
 import { Helmet } from "react-helmet-async";
-import ModalPreveiw from "../Components/ModalPreview";
-import Footer from "../Components/Footer";
-import Loading from "../Components/Loading";
-import MovieList from "../Components/MovieList";
-
-const BASE_PATH = "/original-audio";
+import ModalPreveiw from "../components/ModalPreview";
+import Footer from "../components/Footer";
+import Loading from "../components/Loading";
+import MovieList from "../components/MovieList";
+import { PATH } from "../constants/path";
 
 const Main = styled.main`
   padding-bottom: 50px;
@@ -30,7 +29,7 @@ const MainContainer = styled.section`
 function OriginalAudio() {
   const path = useLocation();
   const setCurrentPath = useSetRecoilState(pathState);
-  const movieMatch = useMatch(`${BASE_PATH}/:movieId`);
+  const movieMatch = useMatch(`${PATH.ORIGINALAUDIO}/:movieId`);
   const scrollY = useRecoilValue(scorllState);
   const [movieIds, setMovieIds] = useState<number[]>([]);
   const popularPage = [1, 2, 3, 4, 5];
@@ -47,8 +46,8 @@ function OriginalAudio() {
   );
 
   useEffect(() => {
-    if (path.pathname === BASE_PATH) {
-      setCurrentPath(BASE_PATH);
+    if (path.pathname === PATH.ORIGINALAUDIO) {
+      setCurrentPath(PATH.ORIGINALAUDIO);
     }
   }, [path.pathname, setCurrentPath]);
   useEffect(() => {

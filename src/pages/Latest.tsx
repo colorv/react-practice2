@@ -2,18 +2,16 @@ import styled from "styled-components";
 import { useLocation, useMatch } from "react-router-dom";
 import { useEffect } from "react";
 import { useQueries, UseQueryResult } from "react-query";
-import { getMovies } from "../api";
+import { getMovies } from "../services/api";
 import { useRecoilValue, useSetRecoilState } from "recoil";
-import { pathState, scorllState } from "../atoms";
-import { Movies } from "../types";
+import { pathState, scorllState } from "../store/atoms";
+import { Movies } from "../common/types";
 import { Helmet } from "react-helmet-async";
-import ModalPreveiw from "../Components/ModalPreview";
-import MovieSlider from "../Components/MovieSlider";
-import HeaderMovie from "../Components/HeaderMovie";
-import Footer from "../Components/Footer";
-import Loading from "../Components/Loading";
-
-const BASE_PATH = "/movies";
+import ModalPreveiw from "../components/ModalPreview";
+import MovieSlider from "../components/MovieSlider";
+import Footer from "../components/Footer";
+import Loading from "../components/Loading";
+import { PATH } from "../constants/path";
 
 const Main = styled.main`
   padding-bottom: 50px;
@@ -25,19 +23,20 @@ const Main = styled.main`
 
 const MainContainer = styled.div`
   padding-bottom: 50px;
+  padding-top: 68px;
 `;
 
-function Movie() {
+function Latest() {
   const path = useLocation();
   const setCurrentPath = useSetRecoilState(pathState);
-  const movieMatch = useMatch(`${BASE_PATH}/:movieId`);
+  const movieMatch = useMatch(`${PATH.LATEST}/:movieId`);
   const scrollY = useRecoilValue(scorllState);
   const popularPage = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10];
   const popular: UseQueryResult<Movies>[] = useQueries(
     popularPage.map((page) => {
       return {
-        queryKey: ["movies", "popular", page],
-        queryFn: () => getMovies("movie", "popular", page),
+        queryKey: ["movies", "upcoming", page],
+        queryFn: () => getMovies("movie", "upcoming", page),
       };
     })
   );
@@ -46,8 +45,8 @@ function Movie() {
   );
 
   useEffect(() => {
-    if (path.pathname === BASE_PATH) {
-      setCurrentPath(BASE_PATH);
+    if (path.pathname === PATH.LATEST) {
+      setCurrentPath(PATH.LATEST);
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
@@ -55,7 +54,7 @@ function Movie() {
   return (
     <>
       <Helmet>
-        <title>영화 - 넷플릭스</title>
+        <title>넷플릭스</title>
       </Helmet>
       <Main
         className={`wraaper ${movieMatch ? "preview-modal_active" : ""}`}
@@ -64,25 +63,18 @@ function Movie() {
         {allQueriesLoaded ? (
           <MainContainer>
             {popular[0].data ? (
-              <>
-                <HeaderMovie
-                  content="movie"
-                  category="popular"
-                  movieId={popular[0].data.results[0].id}
-                />
-                <MovieSlider
-                  title="회원님의 취향저격 베스트 콘텐츠"
-                  content="movie"
-                  category="popular"
-                  sliderIndex={0}
-                  movieId={popular[0].data.results.map((movie) => movie.id)}
-                />
-              </>
+              <MovieSlider
+                title="넷플릭스의 새로운 콘텐츠"
+                content="movie"
+                category="popular"
+                sliderIndex={0}
+                movieId={popular[0].data.results.map((movie) => movie.id)}
+              />
             ) : null}
 
             {popular[1].data ? (
               <MovieSlider
-                title="액션 & 어드벤처"
+                title="오늘의 TOP 20 시리즈"
                 content="movie"
                 category="popular"
                 sliderIndex={1}
@@ -91,7 +83,7 @@ function Movie() {
             ) : null}
             {popular[2].data ? (
               <MovieSlider
-                title="실화 바탕 영화"
+                title="다음주 공개 콘텐츠"
                 content="movie"
                 category="popular"
                 sliderIndex={2}
@@ -101,7 +93,7 @@ function Movie() {
 
             {popular[3].data ? (
               <MovieSlider
-                title="기분 좋아지는 영화"
+                title="오늘의 TOP 20 영화"
                 content="movie"
                 category="popular"
                 sliderIndex={3}
@@ -110,7 +102,7 @@ function Movie() {
             ) : null}
             {popular[4].data ? (
               <MovieSlider
-                title="로맨틱한 영화"
+                title="기다림이 아깝지 않은 콘텐츠"
                 content="movie"
                 category="popular"
                 sliderIndex={4}
@@ -119,47 +111,11 @@ function Movie() {
             ) : null}
             {popular[5].data ? (
               <MovieSlider
-                title="어워드 수상 영화"
+                title="이번주 공개 콘텐츠"
                 content="movie"
                 category="popular"
                 sliderIndex={5}
                 movieId={popular[5].data.results.map((movie) => movie.id)}
-              />
-            ) : null}
-            {popular[6].data ? (
-              <MovieSlider
-                title="다시보기 추천 콘텐츠"
-                content="movie"
-                category="popular"
-                sliderIndex={6}
-                movieId={popular[6].data.results.map((movie) => movie.id)}
-              />
-            ) : null}
-            {popular[7].data ? (
-              <MovieSlider
-                title="오직 넷플릭스에서"
-                content="movie"
-                category="popular"
-                sliderIndex={7}
-                movieId={popular[7].data.results.map((movie) => movie.id)}
-              />
-            ) : null}
-            {popular[8].data ? (
-              <MovieSlider
-                title="어워드 수상 감독"
-                content="movie"
-                category="popular"
-                sliderIndex={8}
-                movieId={popular[8].data.results.map((movie) => movie.id)}
-              />
-            ) : null}
-            {popular[9].data ? (
-              <MovieSlider
-                title="SF & 판타지"
-                content="movie"
-                category="popular"
-                sliderIndex={9}
-                movieId={popular[9].data.results.map((movie) => movie.id)}
               />
             ) : null}
           </MainContainer>
@@ -179,4 +135,4 @@ function Movie() {
   );
 }
 
-export default Movie;
+export default Latest;

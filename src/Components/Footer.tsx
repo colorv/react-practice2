@@ -1,5 +1,11 @@
 import styled from "styled-components";
-import { FacebookIcon, InstagramIcon, TwiiterIcon, YoutubeIcon } from "./Icons";
+import {
+  FacebookIcon,
+  InstagramIcon,
+  TwiiterIcon,
+  YoutubeIcon,
+} from "../icons/Icons";
+import { EXTERNAL_LINK } from "../constants/path";
 
 const FooterContainer = styled.footer`
   padding: 0 4%;
@@ -61,10 +67,10 @@ const FooterCopyRigthRow = styled.div`
 
 function Footer() {
   const socialItem = [
-    { link: "https://www.facebook.com/", icon: <FacebookIcon /> },
-    { link: "https://www.instagram.com/", icon: <InstagramIcon /> },
-    { link: "https://twitter.com/", icon: <TwiiterIcon /> },
-    { link: "https://www.youtube.com/", icon: <YoutubeIcon /> },
+    { link: EXTERNAL_LINK.FACEBOOK, icon: <FacebookIcon /> },
+    { link: EXTERNAL_LINK.INSTARGRAM, icon: <InstagramIcon /> },
+    { link: EXTERNAL_LINK.TWITTER, icon: <TwiiterIcon /> },
+    { link: EXTERNAL_LINK.YOUTUBE, icon: <YoutubeIcon /> },
   ];
 
   const linkItem = [

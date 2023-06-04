@@ -3,11 +3,11 @@ import { useQuery } from "react-query";
 import { useNavigate } from "react-router-dom";
 import { useRecoilValue, useSetRecoilState } from "recoil";
 import styled from "styled-components";
-import { getMainMovieDetail } from "../api";
-import { pathState, previewState, scorllState } from "../atoms";
-import { Content, HeaderMovieProps, SimilarMovies } from "../types";
-import { getImage } from "../utils";
-import { InfoIcon, PlayIcon } from "./Icons";
+import { getMainMovieDetail } from "../services/api";
+import { pathState, previewState, scorllState } from "../store/atoms";
+import { Content, HeaderMovieProps, SimilarMovies } from "../common/types";
+import { getImage } from "../utils/utils";
+import { InfoIcon, PlayIcon } from "../icons/Icons";
 
 const Container = styled.header`
   width: 100%;

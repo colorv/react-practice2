@@ -1,14 +1,13 @@
 import styled from "styled-components";
-import Footer from "../Components/Footer";
+import Footer from "../components/Footer";
 import { useLocation, useMatch } from "react-router-dom";
 import { useRecoilState, useRecoilValue, useSetRecoilState } from "recoil";
-import { myListMoviesState, pathState, scorllState } from "../atoms";
+import { myListMoviesState, pathState, scorllState } from "../store/atoms";
 import { Helmet } from "react-helmet";
-import MovieList from "../Components/MovieList";
-import ModalPreveiw from "../Components/ModalPreview";
+import MovieList from "../components/MovieList";
+import ModalPreveiw from "../components/ModalPreview";
 import { useEffect } from "react";
-
-const BASE_PATH = "/my-list";
+import { PATH } from "../constants/path";
 
 const Main = styled.main`
   padding-bottom: 50px;
@@ -48,13 +47,13 @@ const EmptyList = styled.div`
 function MyList() {
   const path = useLocation();
   const setCurrentPath = useSetRecoilState(pathState);
-  const movieMatch = useMatch(`${BASE_PATH}/:movieId`);
+  const movieMatch = useMatch(`${PATH.MYLIST}/:movieId`);
   const scrollY = useRecoilValue(scorllState);
   const [myListMovies, setMyListMovies] = useRecoilState(myListMoviesState);
 
   useEffect(() => {
-    if (path.pathname === BASE_PATH) {
-      setCurrentPath(BASE_PATH);
+    if (path.pathname === PATH.MYLIST) {
+      setCurrentPath(PATH.MYLIST);
     }
   }, [path.pathname, setCurrentPath]);
 

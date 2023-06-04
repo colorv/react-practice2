@@ -14,8 +14,8 @@
 
 ### 사용 이유
 
-- React 18.2.0버전을 선택한 이유
-  - 강의 기준 x.x.x버전으로 진행했지만 18.2.0버전을 선택함
+- React-Router x.x.0버전을 선택한 이유
+  - 강의 기준 x.x.x버전으로 진행했지만 x.x.0버전을 선택함
   - 강의 내용을 그대로 따라 치기 보다는 공식 문서를 보고 최신버전으로 학습하기 위함
   - x.x.x버전 보다 구조가 조금더 보기 편함
 - Recoil을 선택한 이유
@@ -38,17 +38,15 @@ src
 
 # 변경한 폴더 구조
 src
-├── Components // 재사용 가능 UI 컴포넌트
-│   └──
-├── pages
-│   └──
-├── icons // icon파일
-│   └──
-├── utils // util 파일
-│   └──
-├── store // 상태관리 파일
-│   └──
-└── services // api파일
+├── common
+│   └── types
+├── components // 재사용 가능 컴포넌트
+├── constants // 공통 상수
+├── icons // 아이콘
+├── pages // 페이지 컴포넌트
+├── services // API
+├── store // Recoil
+└── utils // 공통 함수
 ```
 
 #### 변경 이유
@@ -56,7 +54,7 @@ src
 - 작은 프로젝트지만 확장성을 생각안한 너무 단순한 구조
 - 앞으로 큰 프로젝트를 한다 가정하고 각 파일들을 용도에 맞게 분류 해보기 위함
 
-## 생각, 고민
+## Challenge & Experience
 
 1. framer motion으로 슬라이더 만들시 netflix 와 비슷하게 만드려고 하면 position 문제가 생겨서 새로운 슬라이더가 밑에서 출연
 

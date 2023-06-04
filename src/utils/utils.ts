@@ -1,8 +1,9 @@
 // import { NavigateFunction } from "react-router-dom";
 
 import { SetterOrUpdater } from "recoil";
+import { TMDB } from "../constants/path";
 
-const BASE_PATH = "https://image.tmdb.org/t/p/";
+const BASE_PATH = TMDB.IMG_PATH;
 
 export function getImage(path: string | undefined, format?: string) {
   if (!path) return;

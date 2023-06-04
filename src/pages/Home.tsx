@@ -3,19 +3,18 @@ import { useLocation, useMatch } from "react-router-dom";
 import { useEffect } from "react";
 import { Helmet } from "react-helmet-async";
 import { useQueries, UseQueryResult } from "react-query";
-import { getMovies } from "../api";
+import { getMovies } from "../services/api";
 import { useRecoilValue, useSetRecoilState } from "recoil";
-import { pathState, scorllState } from "../atoms";
-import { Movies } from "../types";
-import ModalPreveiw from "../Components/ModalPreview";
-import MovieSlider from "../Components/MovieSlider";
-import HeaderMovie from "../Components/HeaderMovie";
-import Footer from "../Components/Footer";
-import Loading from "../Components/Loading";
-import VerticalMovieSlider from "../Components/VerticalMovieSlider";
-import AllMovie from "../Components/AllMovie";
-
-const BASE_PATH = "/";
+import { pathState, scorllState } from "../store/atoms";
+import { Movies } from "../common/types";
+import ModalPreveiw from "../components/ModalPreview";
+import MovieSlider from "../components/MovieSlider";
+import HeaderMovie from "../components/HeaderMovie";
+import Footer from "../components/Footer";
+import Loading from "../components/Loading";
+import VerticalMovieSlider from "../components/VerticalMovieSlider";
+import AllMovie from "../components/AllMovie";
+import { PATH } from "../constants/path";
 
 const Main = styled.main`
   overflow-x: hidden;
@@ -32,7 +31,7 @@ const MainContainer = styled.div`
 function Home() {
   const path = useLocation();
   const setCurrentPath = useSetRecoilState(pathState);
-  const movieMatch = useMatch(`${BASE_PATH}/:movieId`);
+  const movieMatch = useMatch(`${PATH.HOME}/:movieId`);
   const scrollY = useRecoilValue(scorllState);
   const nowPlayingPage = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10];
   const nowPlaying: UseQueryResult<Movies>[] = useQueries(
@@ -48,8 +47,8 @@ function Home() {
   );
 
   useEffect(() => {
-    if (path.pathname === BASE_PATH) {
-      setCurrentPath(BASE_PATH);
+    if (path.pathname === PATH.HOME) {
+      setCurrentPath(PATH.HOME);
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);

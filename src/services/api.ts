@@ -1,7 +1,8 @@
-import { Category, Content } from "./types";
+import { TMDB } from "../constants/path";
+import { Category, Content } from "../common/types";
 
 const API_KEY = `api_key=${process.env.REACT_APP_API_KEY}`;
-const BASE_PATH = "https://api.themoviedb.org/3";
+const BASE_PATH = TMDB.API_PATH;
 
 export async function getMovies<T extends Content>(
   content: T,

@@ -2,18 +2,17 @@ import styled from "styled-components";
 import { useLocation, useMatch } from "react-router-dom";
 import { useEffect } from "react";
 import { useQueries, UseQueryResult } from "react-query";
-import { getMovies } from "../api";
+import { getMovies } from "../services/api";
 import { useRecoilValue, useSetRecoilState } from "recoil";
-import { pathState, scorllState } from "../atoms";
-import { Movies } from "../types";
+import { pathState, scorllState } from "../store/atoms";
+import { Movies } from "../common/types";
 import { Helmet } from "react-helmet-async";
-import ModalPreveiw from "../Components/ModalPreview";
-import MovieSlider from "../Components/MovieSlider";
-import HeaderMovie from "../Components/HeaderMovie";
-import Footer from "../Components/Footer";
-import Loading from "../Components/Loading";
-
-const BASE_PATH = "/series";
+import ModalPreveiw from "../components/ModalPreview";
+import MovieSlider from "../components/MovieSlider";
+import HeaderMovie from "../components/HeaderMovie";
+import Footer from "../components/Footer";
+import Loading from "../components/Loading";
+import { PATH } from "../constants/path";
 
 const Main = styled.main`
   padding-bottom: 50px;
@@ -30,7 +29,7 @@ const MainContainer = styled.div`
 function Series() {
   const path = useLocation();
   const setCurrentPath = useSetRecoilState(pathState);
-  const movieMatch = useMatch(`${BASE_PATH}/:movieId`);
+  const movieMatch = useMatch(`${PATH.SERIES}/:movieId`);
   const scrollY = useRecoilValue(scorllState);
   const topRatedPage = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10];
   const topRated: UseQueryResult<Movies>[] = useQueries(
@@ -46,8 +45,8 @@ function Series() {
   );
 
   useEffect(() => {
-    if (path.pathname === BASE_PATH) {
-      setCurrentPath(BASE_PATH);
+    if (path.pathname === PATH.SERIES) {
+      setCurrentPath(PATH.SERIES);
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);

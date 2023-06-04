@@ -3,16 +3,16 @@ import { motion, AnimatePresence, useScroll } from "framer-motion";
 import { useQueries, UseQueryResult } from "react-query";
 import { useNavigate } from "react-router-dom";
 import { useRecoilState, useRecoilValue, useSetRecoilState } from "recoil";
-import { getSimilarMovies } from "../api";
+import { getSimilarMovies } from "../services/api";
 import {
   hoverState,
   myListMoviesState,
   pathState,
   previewState,
   scorllState,
-} from "../atoms";
-import { Content, MovieListProps, SimilarMovies } from "../types";
-import { getImage, removeFromMyList, saveToMyList } from "../utils";
+} from "../store/atoms";
+import { Content, MovieListProps, SimilarMovies } from "../common/types";
+import { getImage, removeFromMyList, saveToMyList } from "../utils/utils";
 import FilmRating from "./FilmRating";
 import {
   CheckIcon,
@@ -21,7 +21,7 @@ import {
   PeriodIcon,
   PlusIcon,
   ThumbsUp,
-} from "./Icons";
+} from "../icons/Icons";
 import Loading from "./Loading";
 import { useEffect } from "react";
 

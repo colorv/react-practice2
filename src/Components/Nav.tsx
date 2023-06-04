@@ -3,15 +3,9 @@ import { useEffect, useState } from "react";
 import { Link, useLocation } from "react-router-dom";
 import { useRecoilValue, useSetRecoilState } from "recoil";
 import styled, { keyframes } from "styled-components";
-import { previewState, scorllState } from "../atoms";
-import { NavMenuIcon } from "./Icons";
-
-const HOME = "/";
-const SERIES = "/series";
-const MOVIES = "/movies";
-const LATEST = "/latest";
-const MYLIST = "/my-list";
-const ORIGINALAUDIO = "/original-audio";
+import { previewState, scorllState } from "../store/atoms";
+import { NavMenuIcon } from "../icons/Icons";
+import { PATH } from "../constants/path";
 
 const NavContainer = styled(motion.nav)`
   display: flex;
@@ -219,28 +213,28 @@ function Nav() {
 
   const NavItem = [
     {
-      path: HOME,
+      path: PATH.HOME,
       text: "홈",
     },
 
     {
-      path: SERIES,
+      path: PATH.SERIES,
       text: "시리즈",
     },
     {
-      path: MOVIES,
+      path: PATH.MOVIE,
       text: "영화",
     },
     {
-      path: LATEST,
+      path: PATH.LATEST,
       text: "NEW! 요즘 대세 콘텐츠",
     },
     {
-      path: MYLIST,
+      path: PATH.MYLIST,
       text: "내가 찜한 콘텐츠",
     },
     {
-      path: ORIGINALAUDIO,
+      path: PATH.ORIGINALAUDIO,
       text: "언어별로 찾아보기",
     },
   ];

@@ -1,12 +1,13 @@
 import { BrowserRouter, Routes, Route } from "react-router-dom";
-import Nav from "./Components/Nav";
-import Home from "./Routes/Home";
-import Movie from "./Routes/Movie";
-import Search from "./Routes/Search";
-import Series from "./Routes/Series";
-import Latest from "./Routes/Latest";
-import MyList from "./Routes/MyList";
-import OriginalAudio from "./Routes/OriginalAudio";
+import Nav from "./components/Nav";
+import Home from "./pages/Home";
+import Movie from "./pages/Movie";
+import Search from "./pages/Search";
+import Series from "./pages/Series";
+import Latest from "./pages/Latest";
+import MyList from "./pages/MyList";
+import OriginalAudio from "./pages/OriginalAudio";
+import { PATH } from "./constants/path";
 
 function App() {
   // regex사용해서 movieID number로만 받기
@@ -14,25 +15,25 @@ function App() {
     <BrowserRouter basename={process.env.PUBLIC_URL}>
       <Nav />
       <Routes>
-        <Route path="/" element={<Home />}>
-          <Route path=":movieId" element={<Home />} />
+        <Route path={PATH.HOME} element={<Home />}>
+          <Route path={PATH.MOVIEID} element={<Home />} />
         </Route>
-        <Route path="series" element={<Series />}>
-          <Route path=":movieId" element={<Series />} />
+        <Route path={PATH.SERIES} element={<Series />}>
+          <Route path={PATH.MOVIEID} element={<Series />} />
         </Route>
-        <Route path="movies" element={<Movie />}>
-          <Route path=":movieId" element={<Movie />} />
+        <Route path={PATH.MOVIE} element={<Movie />}>
+          <Route path={PATH.MOVIEID} element={<Movie />} />
         </Route>
-        <Route path="latest" element={<Latest />}>
-          <Route path=":movieId" element={<Latest />} />
+        <Route path={PATH.LATEST} element={<Latest />}>
+          <Route path={PATH.MOVIEID} element={<Latest />} />
         </Route>
-        <Route path="my-list" element={<MyList />}>
-          <Route path=":movieId" element={<MyList />} />
+        <Route path={PATH.MYLIST} element={<MyList />}>
+          <Route path={PATH.MOVIEID} element={<MyList />} />
         </Route>
-        <Route path="original-audio" element={<OriginalAudio />}>
-          <Route path=":movieId" element={<OriginalAudio />} />
+        <Route path={PATH.ORIGINALAUDIO} element={<OriginalAudio />}>
+          <Route path={PATH.MOVIEID} element={<OriginalAudio />} />
         </Route>
-        <Route path="search" element={<Search />} />
+        <Route path={PATH.SEARCH} element={<Search />} />
       </Routes>
     </BrowserRouter>
   );

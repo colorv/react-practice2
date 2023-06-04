@@ -2,7 +2,7 @@ import styled from "styled-components";
 import { motion } from "framer-motion";
 import { useNavigate } from "react-router-dom";
 import { useRecoilValue, useSetRecoilState } from "recoil";
-import { pathState, previewState, scorllState } from "../atoms";
+import { pathState, previewState, scorllState } from "../store/atoms";
 
 const PreviewOverlay = styled(motion.div)`
   width: 100%;

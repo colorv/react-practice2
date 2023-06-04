@@ -4,15 +4,15 @@ import { useEffect, useState } from "react";
 import { useQueries, useQuery, UseQueryResult } from "react-query";
 import { useNavigate } from "react-router-dom";
 import { useRecoilState, useRecoilValue, useSetRecoilState } from "recoil";
-import { getPreviewMovies, getSimilarMovies } from "../api";
+import { getPreviewMovies, getSimilarMovies } from "../services/api";
 import {
   myListMoviesState,
   pathState,
   previewState,
   scorllState,
-} from "../atoms";
-import { PreviewMovie, PreviewProps, SimilarMovies } from "../types";
-import { getImage, removeFromMyList, saveToMyList } from "../utils";
+} from "../store/atoms";
+import { PreviewMovie, PreviewProps, SimilarMovies } from "../common/types";
+import { getImage, removeFromMyList, saveToMyList } from "../utils/utils";
 import {
   CloseIcon,
   PlusIcon,
@@ -20,7 +20,7 @@ import {
   DownIcon,
   UpIcon,
   CheckIcon,
-} from "./Icons";
+} from "../icons/Icons";
 import FilmRating from "./FilmRating";
 
 const PreviewOverlay = styled(motion.div)`

@@ -4,16 +4,16 @@ import { useQueries, UseQueryResult } from "react-query";
 import { Link, useNavigate } from "react-router-dom";
 import { useRecoilState, useRecoilValue, useSetRecoilState } from "recoil";
 import styled from "styled-components";
-import { getSimilarMovies } from "../api";
+import { getSimilarMovies } from "../services/api";
 import {
   hoverState,
   myListMoviesState,
   pathState,
   previewState,
   scorllState,
-} from "../atoms";
-import { Content, MovieSliderProps, SimilarMovies } from "../types";
-import { getImage, removeFromMyList, saveToMyList } from "../utils";
+} from "../store/atoms";
+import { Content, MovieSliderProps, SimilarMovies } from "../common/types";
+import { getImage, removeFromMyList, saveToMyList } from "../utils/utils";
 import FilmRating from "./FilmRating";
 import {
   CheckIcon,
@@ -25,7 +25,7 @@ import {
   PlusIcon,
   RightArrow,
   ThumbsUp,
-} from "./Icons";
+} from "../icons/Icons";
 
 const Slider = styled.section`
   width: 100vw;

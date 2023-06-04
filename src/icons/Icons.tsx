@@ -3,7 +3,7 @@ import {
   DefaultFilmRatingsProps,
   FilmRatingIconProps,
   NumberIconProps,
-} from "../types";
+} from "../common/types";
 
 const Svg = styled.svg`
   fill: none;
