@@ -346,12 +346,10 @@ const Period = styled.span`
 `;
 
 const sliderVariants = {
-  initial: ({ direction }: CutomProps) => {
+  initial: ({ direction, sliderWidth }: CutomProps) => {
     return {
-      x:
-        direction > 0
-          ? window.innerWidth - window.innerWidth * 0.08
-          : -window.innerWidth + window.innerWidth * 0.08,
+      x: direction > 0 ? sliderWidth : -sliderWidth,
+      // 슬라이더 * n(offset)
     };
   },
   animate: ({ btnHide }: CutomProps) => {
@@ -360,12 +358,9 @@ const sliderVariants = {
       transition: { duration: 0.55 },
     };
   },
-  end: ({ direction }: CutomProps) => {
+  end: ({ direction, sliderWidth }: CutomProps) => {
     return {
-      x:
-        direction < 0
-          ? window.innerWidth - window.innerWidth * 0.08
-          : -window.innerWidth + window.innerWidth * 0.08,
+      x: direction < 0 ? sliderWidth : -sliderWidth,
       overflow: "hidden",
       transition: { duration: 0.55 },
     };
@@ -393,16 +388,17 @@ const hoverVariants = {
   },
   animate: {
     display: "inherit",
-    transition: { type: "tween", delay: 0.6 },
+    transition: { delay: 0.6 },
   },
   exit: {
     x: 0,
     y: 0,
     width: "97%",
-    transition: { ease: "easeInOut", duration: 0.3 },
+    transition: { duration: 0.3 },
   },
   hidden: {
     opacity: 0,
+    fontSize: "10px",
     transition: { duration: 0.3 },
   },
 };
@@ -413,6 +409,7 @@ interface MovieProps {
 interface CutomProps {
   direction: number;
   btnHide: boolean;
+  sliderWidth: number;
 }
 
 function MovieSlider<T extends Content>({
@@ -458,48 +455,45 @@ function MovieSlider<T extends Content>({
     if (btnHide) setBtnHide(false);
 
     const maxIndex = Math.ceil(moviesLength / offset) - 1;
+    const remainder = moviesLength % offset;
     if (newDirection > 0) {
-      if (newMovieIds.length % offset !== 0) {
+      if (remainder !== 0) {
         setNewMovieIds(() => {
           const copyMovies = [...newMovieIds];
           const sliceMovies = [
-            ...copyMovies.splice(
-              0,
-              page === maxIndex - 1 ? newMovieIds.length % offset : offset
-            ),
+            ...copyMovies.splice(0, page === maxIndex - 1 ? remainder : offset),
           ];
           return [...copyMovies, ...sliceMovies];
         });
       }
-      if (newMovieIds.length % offset === 0) {
+      if (remainder === 0) {
         setNewMovieIds(() => {
           const copyMovies = [...newMovieIds];
           const sliceMovies = [...copyMovies.splice(0, offset)];
-          console.log([...copyMovies, ...sliceMovies]);
           return [...copyMovies, ...sliceMovies];
         });
       }
     }
     if (newDirection < 0) {
-      if (newMovieIds.length % offset !== 0) {
+      if (remainder !== 0) {
         setNewMovieIds(() => {
           const copyMovies = [...newMovieIds];
           const sliceMovies = [
             ...copyMovies.splice(
               page === maxIndex
-                ? copyMovies.length - (newMovieIds.length % offset)
-                : copyMovies.length - offset,
-              page === maxIndex ? newMovieIds.length % offset : offset
+                ? moviesLength - remainder
+                : moviesLength - offset,
+              page === maxIndex ? remainder : offset
             ),
           ];
           return [...sliceMovies, ...copyMovies];
         });
       }
-      if (newMovieIds.length % offset === 0) {
+      if (remainder === 0) {
         setNewMovieIds(() => {
           const copyMovies = [...newMovieIds];
           const sliceMovies = [
-            ...copyMovies.splice(copyMovies.length - offset, offset),
+            ...copyMovies.splice(moviesLength - offset, offset),
           ];
           return [...sliceMovies, ...copyMovies];
         });
@@ -517,22 +511,19 @@ function MovieSlider<T extends Content>({
     });
     toggleAnimationEnd();
   };
+
   const handleMovieHover = (movieId: string, itemIndex: number) => {
-    let position = "";
-
-    if (itemIndex === 1) {
-      position = "firstChild";
-    }
-    if (itemIndex === offset) {
-      position = "lastChild";
-    }
-
     setHover((state) => {
       return {
         hover: !state.hover,
         hoverId: movieId,
         hoverSliderIndex: sliderIndex,
-        position,
+        position:
+          itemIndex === 1
+            ? "firstChild"
+            : itemIndex === offset
+            ? "lastChild"
+            : "",
       };
     });
   };
@@ -635,7 +626,6 @@ function MovieSlider<T extends Content>({
               <AnimatePresence
                 initial={false}
                 mode="popLayout"
-                custom={{ direction, btnHide }}
                 onExitComplete={toggleAnimationEnd}
               >
                 <MovieList
@@ -647,8 +637,11 @@ function MovieSlider<T extends Content>({
                   initial="initial"
                   animate="animate"
                   exit="end"
-                  transition={{ type: "tween" }}
-                  custom={{ direction, btnHide }}
+                  custom={{
+                    direction,
+                    btnHide,
+                    sliderWidth: screenWidth - screenWidth * 0.08,
+                  }}
                 >
                   {movies.map((movie, index) => (
                     <Movie
@@ -707,9 +700,7 @@ function MovieSlider<T extends Content>({
                             }
                             animate="animate"
                             exit="exit"
-                            // key={hoverId}
                             onMouseLeave={resetHoverState}
-                            // position={"0"}
                           >
                             <MovieImgWrapper
                               className="mini-modal-img"
