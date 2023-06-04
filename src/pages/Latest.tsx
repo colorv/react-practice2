@@ -1,36 +1,12 @@
-import styled from "styled-components";
-import { useLocation, useMatch } from "react-router-dom";
-import { useEffect } from "react";
 import { useQueries, UseQueryResult } from "react-query";
 import { getMovies } from "../services/api";
-import { useRecoilValue, useSetRecoilState } from "recoil";
-import { pathState, scorllState } from "../store/atoms";
 import { Movies } from "../common/types";
 import { Helmet } from "react-helmet-async";
-import ModalPreveiw from "../components/ModalPreview";
 import MovieSlider from "../components/MovieSlider";
-import Footer from "../components/Footer";
 import Loading from "../components/Loading";
-import { PATH } from "../constants/path";
-
-const Main = styled.main`
-  padding-bottom: 50px;
-  overflow-x: hidden;
-  &.preview-modal_active {
-    position: fixed;
-  }
-`;
-
-const MainContainer = styled.div`
-  padding-bottom: 50px;
-  padding-top: 68px;
-`;
+import Layout from "../components/Layout";
 
 function Latest() {
-  const path = useLocation();
-  const setCurrentPath = useSetRecoilState(pathState);
-  const movieMatch = useMatch(`${PATH.LATEST}/:movieId`);
-  const scrollY = useRecoilValue(scorllState);
   const popularPage = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10];
   const popular: UseQueryResult<Movies>[] = useQueries(
     popularPage.map((page) => {
@@ -44,24 +20,14 @@ function Latest() {
     (query) => !query.isLoading && query.data
   );
 
-  useEffect(() => {
-    if (path.pathname === PATH.LATEST) {
-      setCurrentPath(PATH.LATEST);
-    }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
-
   return (
     <>
       <Helmet>
         <title>넷플릭스</title>
       </Helmet>
-      <Main
-        className={`wraaper ${movieMatch ? "preview-modal_active" : ""}`}
-        style={{ top: movieMatch ? `-${scrollY}px` : "" }}
-      >
+      <Layout headerMovieNone={true}>
         {allQueriesLoaded ? (
-          <MainContainer>
+          <>
             {popular[0].data ? (
               <MovieSlider
                 title="넷플릭스의 새로운 콘텐츠"
@@ -118,19 +84,11 @@ function Latest() {
                 movieId={popular[5].data.results.map((movie) => movie.id)}
               />
             ) : null}
-          </MainContainer>
+          </>
         ) : (
           <Loading />
         )}
-        <Footer />
-      </Main>
-
-      {movieMatch ? (
-        <ModalPreveiw
-          content="movie"
-          movieId={Number(movieMatch.params.movieId)}
-        />
-      ) : null}
+      </Layout>
     </>
   );
 }

@@ -1,38 +1,14 @@
-import styled from "styled-components";
-import { useLocation, useMatch } from "react-router-dom";
-import { useEffect } from "react";
 import { Helmet } from "react-helmet-async";
 import { useQueries, UseQueryResult } from "react-query";
 import { getMovies } from "../services/api";
-import { useRecoilValue, useSetRecoilState } from "recoil";
-import { pathState, scorllState } from "../store/atoms";
 import { Movies } from "../common/types";
-import ModalPreveiw from "../components/ModalPreview";
 import MovieSlider from "../components/MovieSlider";
 import HeaderMovie from "../components/HeaderMovie";
-import Footer from "../components/Footer";
 import Loading from "../components/Loading";
 import VerticalMovieSlider from "../components/VerticalMovieSlider";
-import AllMovie from "../components/AllMovie";
-import { PATH } from "../constants/path";
-
-const Main = styled.main`
-  overflow-x: hidden;
-
-  &.preview-modal_active {
-    position: fixed;
-  }
-`;
-
-const MainContainer = styled.div`
-  padding-bottom: 50px;
-`;
+import Layout from "../components/Layout";
 
 function Home() {
-  const path = useLocation();
-  const setCurrentPath = useSetRecoilState(pathState);
-  const movieMatch = useMatch(`${PATH.HOME}/:movieId`);
-  const scrollY = useRecoilValue(scorllState);
   const nowPlayingPage = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10];
   const nowPlaying: UseQueryResult<Movies>[] = useQueries(
     nowPlayingPage.map((page) => {
@@ -46,24 +22,14 @@ function Home() {
     (query) => !query.isLoading && query.data
   );
 
-  useEffect(() => {
-    if (path.pathname === PATH.HOME) {
-      setCurrentPath(PATH.HOME);
-    }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
-
   return (
     <>
       <Helmet>
         <title>홈 - 넷플릭스</title>
       </Helmet>
-      <Main
-        className={`main ${movieMatch ? "preview-modal_active" : ""}`}
-        style={{ top: movieMatch ? `-${scrollY}px` : "" }}
-      >
+      <Layout headerMovieNone={false}>
         {allQueriesLoaded ? (
-          <MainContainer className="main-container">
+          <>
             {nowPlaying[0].data ? (
               <>
                 <HeaderMovie
@@ -127,25 +93,11 @@ function Home() {
                 movieId={nowPlaying[5].data.results.map((movie) => movie.id)}
               />
             ) : null}
-          </MainContainer>
+          </>
         ) : (
           <Loading />
         )}
-        <Footer />
-      </Main>
-
-      {movieMatch?.params.movieId &&
-      /^[0-9]+$/.test(movieMatch.params.movieId) ? (
-        <ModalPreveiw
-          content="movie"
-          movieId={Number(movieMatch.params.movieId)}
-        />
-      ) : null}
-
-      {movieMatch?.params.movieId &&
-      /^all-movie$/.test(movieMatch.params.movieId) ? (
-        <AllMovie />
-      ) : null}
+      </Layout>
     </>
   );
 }

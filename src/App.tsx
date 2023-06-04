@@ -1,5 +1,4 @@
 import { BrowserRouter, Routes, Route } from "react-router-dom";
-import Nav from "./components/Nav";
 import Home from "./pages/Home";
 import Movie from "./pages/Movie";
 import Search from "./pages/Search";
@@ -13,7 +12,6 @@ function App() {
   // regex사용해서 movieID number로만 받기
   return (
     <BrowserRouter basename={process.env.PUBLIC_URL}>
-      <Nav />
       <Routes>
         <Route path={PATH.HOME} element={<Home />}>
           <Route path={PATH.MOVIEID} element={<Home />} />

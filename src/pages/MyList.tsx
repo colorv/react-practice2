@@ -1,25 +1,10 @@
 import styled from "styled-components";
-import Footer from "../components/Footer";
-import { useLocation, useMatch } from "react-router-dom";
-import { useRecoilState, useRecoilValue, useSetRecoilState } from "recoil";
-import { myListMoviesState, pathState, scorllState } from "../store/atoms";
+import { useRecoilState } from "recoil";
+import { myListMoviesState } from "../store/atoms";
 import { Helmet } from "react-helmet";
 import MovieList from "../components/MovieList";
-import ModalPreveiw from "../components/ModalPreview";
 import { useEffect } from "react";
-import { PATH } from "../constants/path";
-
-const Main = styled.main`
-  padding-bottom: 50px;
-  &.preview-modal_active {
-    position: fixed;
-  }
-`;
-
-const MainContainer = styled.section`
-  padding-bottom: 50px;
-  padding-top: 68px;
-`;
+import Layout from "../components/Layout";
 
 const Title = styled.div`
   display: flex;
@@ -45,17 +30,7 @@ const EmptyList = styled.div`
 `;
 
 function MyList() {
-  const path = useLocation();
-  const setCurrentPath = useSetRecoilState(pathState);
-  const movieMatch = useMatch(`${PATH.MYLIST}/:movieId`);
-  const scrollY = useRecoilValue(scorllState);
   const [myListMovies, setMyListMovies] = useRecoilState(myListMoviesState);
-
-  useEffect(() => {
-    if (path.pathname === PATH.MYLIST) {
-      setCurrentPath(PATH.MYLIST);
-    }
-  }, [path.pathname, setCurrentPath]);
 
   useEffect(() => {
     const myListJson = localStorage.getItem("mylist");
@@ -70,11 +45,8 @@ function MyList() {
       {/* <Helmet>
         <title>넷플릭스</title>
       </Helmet> */}
-      <Main
-        className={`wraaper ${movieMatch ? "preview-modal_active" : ""}`}
-        style={{ top: movieMatch ? `-${scrollY}px` : "" }}
-      >
-        <MainContainer>
+      <Layout headerMovieNone={true}>
+        <>
           <Title>
             <h1>내가 찜한 콘텐츠</h1>
           </Title>
@@ -85,16 +57,8 @@ function MyList() {
               <span>아직 찜하신 콘텐츠가 없습니다.</span>
             </EmptyList>
           )}
-        </MainContainer>
-        <Footer />
-      </Main>
-
-      {movieMatch ? (
-        <ModalPreveiw
-          content="movie"
-          movieId={Number(movieMatch.params.movieId)}
-        />
-      ) : null}
+        </>
+      </Layout>
     </>
   );
 }
