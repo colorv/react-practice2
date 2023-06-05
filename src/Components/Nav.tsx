@@ -201,7 +201,7 @@ const navVariants = {
 function Nav() {
   const location = useLocation();
   const [searchOpen, setSearchOpen] = useState(false);
-  const [screenWidth, setScreenWidth] = useState(0);
+  const [screenWidth, setScreenWidth] = useState(window.innerWidth);
   const [menu, setMenu] = useState(false);
   const setScrollY = useSetRecoilState(scorllState);
   const previewActive = useRecoilValue(previewState);
