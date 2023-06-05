@@ -453,6 +453,7 @@ function MovieSlider<T extends Content>({
   const paginate = (newDirection: number, moviesLength: number) => {
     if (animationEnd) return;
     if (btnHide) setBtnHide(false);
+    toggleAnimationEnd();
 
     const maxIndex = Math.ceil(moviesLength / offset) - 1;
     const remainder = moviesLength % offset;
@@ -509,7 +510,7 @@ function MovieSlider<T extends Content>({
       }
       return [page + newDirection, newDirection];
     });
-    toggleAnimationEnd();
+    setTimeout(toggleAnimationEnd, 800);
   };
 
   const handleMovieHover = (movieId: string, itemIndex: number) => {
@@ -556,6 +557,14 @@ function MovieSlider<T extends Content>({
       { width: 0, offset: 3 },
     ];
     const offset = offsets.find((item) => width >= item.width)?.offset || 6;
+
+    setPage(([page, direction]) => {
+      const pageMaxIndex = Math.ceil(newMovieIds.length / offset) - 1;
+      if (page > pageMaxIndex) {
+        return [pageMaxIndex, 0];
+      }
+      return [page, direction];
+    });
     setScreenWidth(width);
     setOffset(offset);
   };
@@ -612,21 +621,25 @@ function MovieSlider<T extends Content>({
             )}
             <SliderContent className="slider-contents">
               <Pagination className="pagination">
-                {movies.map((value, index) =>
-                  index < Math.ceil(movies.length / offset) ? (
+                {new Array(Math.ceil(movies.length / offset))
+                  .fill(null)
+                  .map((_, index) => (
                     <Page
                       className={page === index ? "selected" : ""}
                       key={`page${index + 1}`}
                       transition={{ delay: 0.5 }}
-                    ></Page>
-                  ) : null
-                )}
+                    />
+                  ))}
               </Pagination>
 
               <AnimatePresence
                 initial={false}
                 mode="popLayout"
-                onExitComplete={toggleAnimationEnd}
+                custom={{
+                  direction,
+                  btnHide,
+                  sliderWidth: screenWidth - screenWidth * 0.08,
+                }}
               >
                 <MovieList
                   className={`item-list ${
