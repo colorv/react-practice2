@@ -7,6 +7,7 @@ import ModalPreveiw from "../components/ModalPreview";
 import Footer from "../components/Footer";
 import AllMovie from "../components/AllMovie";
 import Nav from "./Nav";
+import { Helmet } from "react-helmet-async";
 
 const Main = styled.main`
   overflow-x: hidden;
@@ -28,9 +29,10 @@ interface HeaderProps {
 interface LayoutProps {
   children: React.ReactNode;
   headerMovieNone: boolean;
+  pageTitle: string;
 }
 
-const Layout = ({ children, headerMovieNone }: LayoutProps) => {
+const Layout = ({ children, headerMovieNone, pageTitle }: LayoutProps) => {
   const path = useLocation();
   const [currentPath, setCurrentPath] = useRecoilState(pathState);
   const movieMatch = useMatch(`${currentPath}/:movieId`);
@@ -43,6 +45,11 @@ const Layout = ({ children, headerMovieNone }: LayoutProps) => {
   }, []);
   return (
     <>
+      <Helmet>
+        <title>
+          {pageTitle !== "" ? `${pageTitle} - 넷플릭스` : "넷플릭스"}
+        </title>
+      </Helmet>
       <Nav />
       <Main
         className={`main ${movieMatch ? "preview-modal_active" : ""}`}

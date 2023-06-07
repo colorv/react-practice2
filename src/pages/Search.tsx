@@ -1,5 +1,4 @@
 import styled from "styled-components";
-import { Helmet } from "react-helmet";
 import Layout from "../components/Layout";
 
 const EmptyPage = styled.div`
@@ -13,10 +12,7 @@ const EmptyPage = styled.div`
 function Search() {
   return (
     <>
-      <Helmet>
-        <title>넷플릭스</title>
-      </Helmet>
-      <Layout headerMovieNone={true}>
+      <Layout headerMovieNone={true} pageTitle="">
         <EmptyPage></EmptyPage>
       </Layout>
     </>

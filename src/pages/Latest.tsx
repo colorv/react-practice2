@@ -1,7 +1,6 @@
 import { useQueries, UseQueryResult } from "react-query";
 import { getMovies } from "../services/api";
 import { Movies } from "../common/types";
-import { Helmet } from "react-helmet-async";
 import MovieSlider from "../components/MovieSlider";
 import Loading from "../components/Loading";
 import Layout from "../components/Layout";
@@ -22,10 +21,7 @@ function Latest() {
 
   return (
     <>
-      <Helmet>
-        <title>넷플릭스</title>
-      </Helmet>
-      <Layout headerMovieNone={true}>
+      <Layout headerMovieNone={true} pageTitle="">
         {allQueriesLoaded ? (
           <>
             {popular[0].data ? (

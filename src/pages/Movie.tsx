@@ -1,7 +1,6 @@
 import { useQueries, UseQueryResult } from "react-query";
 import { getMovies } from "../services/api";
 import { Movies } from "../common/types";
-import { Helmet } from "react-helmet-async";
 import MovieSlider from "../components/MovieSlider";
 import HeaderMovie from "../components/HeaderMovie";
 import Loading from "../components/Loading";
@@ -23,10 +22,7 @@ function Movie() {
 
   return (
     <>
-      <Helmet>
-        <title>영화 - 넷플릭스</title>
-      </Helmet>
-      <Layout headerMovieNone={false}>
+      <Layout headerMovieNone={false} pageTitle="영화">
         {allQueriesLoaded ? (
           <>
             {popular[0].data ? (

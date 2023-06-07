@@ -1,7 +1,6 @@
 import styled from "styled-components";
 import { useRecoilState } from "recoil";
 import { myListMoviesState } from "../store/atoms";
-import { Helmet } from "react-helmet";
 import MovieList from "../components/MovieList";
 import { useEffect } from "react";
 import Layout from "../components/Layout";
@@ -42,10 +41,7 @@ function MyList() {
 
   return (
     <>
-      {/* <Helmet>
-        <title>넷플릭스</title>
-      </Helmet> */}
-      <Layout headerMovieNone={true}>
+      <Layout headerMovieNone={true} pageTitle="">
         <>
           <Title>
             <h1>내가 찜한 콘텐츠</h1>

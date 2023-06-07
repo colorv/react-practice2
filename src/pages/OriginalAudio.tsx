@@ -2,7 +2,6 @@ import { useEffect, useState } from "react";
 import { useQueries, UseQueryResult } from "react-query";
 import { getMovies } from "../services/api";
 import { Movies } from "../common/types";
-import { Helmet } from "react-helmet-async";
 import Loading from "../components/Loading";
 import MovieList from "../components/MovieList";
 import Layout from "../components/Layout";
@@ -37,10 +36,7 @@ function OriginalAudio() {
 
   return (
     <>
-      <Helmet>
-        <title>넷플릭스</title>
-      </Helmet>
-      <Layout headerMovieNone={true}>
+      <Layout headerMovieNone={true} pageTitle="">
         {allQueriesLoaded ? (
           <>
             <MovieList content="movie" category="popular" movieId={movieIds} />
