@@ -18,6 +18,8 @@ const GlobalStyle = createGlobalStyle`
     -webkit-user-select: none;
     -moz-user-select: none;
     -ms-user-select: none;
+    font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+
   }
   a{
     color: inherit;

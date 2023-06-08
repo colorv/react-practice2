@@ -49,6 +49,10 @@ const Layout = ({ children, headerMovieNone, pageTitle }: LayoutProps) => {
         <title>
           {pageTitle !== "" ? `${pageTitle} - 넷플릭스` : "넷플릭스"}
         </title>
+        <style>
+          @import
+          url('https://fonts.googleapis.com/css2?family=Sunflower:wght@500&display=swap');
+        </style>
       </Helmet>
       <Nav />
       <Main

@@ -13,6 +13,7 @@ const NavContainer = styled(motion.nav)`
   width: 100%;
   height: 68px;
   top: 0;
+  font-family: "Sunflower", sans-serif;
   font-size: 1vw;
   background-image: linear-gradient(
     180deg,
