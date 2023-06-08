@@ -160,3 +160,9 @@ export interface Certification {
   certification: string;
   release_date: string;
 }
+
+// Page Slider Props
+export interface sliderProps {
+  title: string;
+  option: "default" | "ranking";
+}

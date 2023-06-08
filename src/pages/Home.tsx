@@ -1,6 +1,6 @@
 import { useQueries, UseQueryResult } from "react-query";
 import { getMovies } from "../services/api";
-import { Movies } from "../common/types";
+import { Movies, sliderProps } from "../common/types";
 import MovieSlider from "../components/MovieSlider";
 import HeaderMovie from "../components/HeaderMovie";
 import Loading from "../components/Loading";
@@ -8,7 +8,7 @@ import VerticalMovieSlider from "../components/VerticalMovieSlider";
 import Layout from "../components/Layout";
 
 function Home() {
-  const slider = [
+  const slider: sliderProps[] = [
     { title: "지난 1년간 공개된 콘텐츠", option: "default" },
     { title: "오늘 대한민국의 TOP 10 시리즈", option: "ranking" },
     { title: "회원님을 위한 오늘의 특선", option: "default" },
@@ -30,6 +30,7 @@ function Home() {
     { title: "다큐멘터리", option: "default" },
     { title: "오직 넷플릭스에서", option: "default" },
   ];
+
   const nowPlaying: UseQueryResult<Movies>[] = useQueries(
     slider.map((_, index) => {
       return {
@@ -43,46 +44,44 @@ function Home() {
   );
 
   return (
-    <>
-      <Layout headerMovieNone={false} pageTitle="홈">
-        {allQueriesLoaded ? (
-          <>
-            {nowPlaying[0].data ? (
-              <HeaderMovie
-                content="movie"
-                category="now_playing"
-                movieId={nowPlaying[0].data.results[0].id}
-              />
-            ) : null}
-            {nowPlaying.map((movie, index) =>
-              movie.data ? (
-                slider[index].option === "default" ? (
-                  <MovieSlider
-                    key={index}
-                    title={slider[index].title}
-                    content="movie"
-                    category="now_playing"
-                    sliderIndex={index}
-                    movieId={movie.data.results.map((movie) => movie.id)}
-                  />
-                ) : (
-                  <VerticalMovieSlider
-                    key={index}
-                    title={slider[index].title}
-                    content="movie"
-                    category="now_playing"
-                    sliderIndex={index}
-                    movieId={movie.data.results.map((movie) => movie.id)}
-                  />
-                )
-              ) : null
-            )}
-          </>
-        ) : (
-          <Loading />
-        )}
-      </Layout>
-    </>
+    <Layout headerMovieNone={false} pageTitle="홈">
+      {allQueriesLoaded ? (
+        <>
+          {nowPlaying[0].data ? (
+            <HeaderMovie
+              content="movie"
+              category="now_playing"
+              movieId={nowPlaying[0].data.results[0].id}
+            />
+          ) : null}
+          {nowPlaying.map((movie, index) =>
+            movie.data ? (
+              slider[index].option === "default" ? (
+                <MovieSlider
+                  key={index}
+                  title={slider[index].title}
+                  content="movie"
+                  category="now_playing"
+                  sliderIndex={index}
+                  movieId={movie.data.results.map((movie) => movie.id)}
+                />
+              ) : (
+                <VerticalMovieSlider
+                  key={index}
+                  title={slider[index].title}
+                  content="movie"
+                  category="now_playing"
+                  sliderIndex={index}
+                  movieId={movie.data.results.map((movie) => movie.id)}
+                />
+              )
+            ) : null
+          )}
+        </>
+      ) : (
+        <Loading />
+      )}
+    </Layout>
   );
 }
 
