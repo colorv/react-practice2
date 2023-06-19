@@ -1,45 +1,189 @@
 # Netflix Clone
 
+## Description
+
+- 클론 코딩을 통해 React, TypeScript 학습
+- 강의 내용을 그대로 따라 치거나 끝내는 것이 아닌 스스로 문제점을 찾고 해결하는 습관 기르기
+
 <p align="center">
-<img width="720" alt="mainImg" src="https://github.com/colorv/react-practice2/assets/75740740/6ea73178-9322-422d-91da-f86e23ba60de">
+<img width="400" alt="변경전" src="https://github.com/colorv/react-practice2/assets/75740740/934a7ddb-9bda-43f9-88ee-f5307e637dfe">
+<img width="400" alt="변경후" src="https://github.com/colorv/react-practice2/assets/75740740/b3c931aa-8d45-498b-bb7f-5ebb81c2e8f7">
 </p>
+<div style="display: flex;justify-content: space-around;">
+<span>변경전(<a href="https://nomadcoders.github.io/react-masterclass/">바로가기</a>)</span>
+<span>변경후(<a href="https://colorv.github.io/react-practice2/">바로가기</a>)</span>
+</div>
 
 ## Skill
 
 - `React`, `TypeScript`
-- `React-Query`
-- `React-Router`
+- `React-Query`, `React-Router`, `React-lazy-load`
 - `Recoil`
 - `Styled-Components`, `Framer-motion`
 
-### 사용 이유
+## Challenge & Experience
 
-- React-Router x.x.0버전을 선택한 이유
-  - 강의 기준 x.x.x버전으로 진행했지만 x.x.0버전을 선택함
-  - 강의 내용을 그대로 따라 치기 보다는 공식 문서를 보고 최신버전으로 학습하기 위함
-  - x.x.x버전 보다 구조가 조금더 보기 편함
-- Recoil을 선택한 이유
-  - 장점
-    - 리액트 hook과 비슷한 구조로 접근성이 좋아 선택하게되었음
-  - 단점
-    - [내용 추가하기]
-  - 비교
-    - [Redux와 비교해서 내용 추가하기]
+### 1. Carousel Slider 구현 - Framer Motion
 
-## Project Sturucture
+- 반응형 슬라이더로 구현하기 위해 onResize 이벤트를 통해 화면 크기에 따라 offset을 설정했습니다.
+
+  ```js
+  const onResize = () => {
+    const width = window.innerWidth;
+    const offsets = [
+      { width: 1400, offset: 6 },
+      { width: 1100, offset: 5 },
+      { width: 800, offset: 4 },
+      { width: 0, offset: 3 },
+    ];
+    const offset = offsets.find((item) => width >= item.width)?.offset || 6;
+    setOffset(offset);
+  };
+  ```
+
+- 이전 페이지나 다음 페이지로 이동 시 offset의 값에 따라 배열의 순서를 변경하여 슬라이더 아이템이 나타나도록 구현했습니다.
+  <img width="699" alt="offset" src="https://github.com/colorv/react-practice2/assets/75740740/7a5f7eda-6fbc-40ce-af67-11c2b2534b57">
+
+#### 문제
+
+- 클릭 이벤트 시 새로운 슬라이드가 아래에서 자리를 차지하며 나타나는 현상
+- transform 속성을 사용할 경우, hover 시 나타나는 아이템이 슬라이드에 가려지는 문제
+- 슬라이드 애니메이션이 부자연스럽게 동작하는 문제
+- 이미지 파일이 없는 경우 빈 공간 생기는 문제
+
+#### 해결 과정
+
+- position : absolute가 아닌 reletive 속성을 사용해 새로 나타나는 슬라이드가 밑에서 자리를 차지하면서 출현하는 문제가 있어 공식 문서를 참조해 mode : “poplayout”을 설정해서 해결했습니다.
+- 검색을 통해 transform 속성을 사용할 경우 새로운 stacking context에 배치되기 때문에 z-index 문제가 발생하는 것을 알게 되었고 해결 방안을 찾아 프로젝트에 적용해 보았으나 원하는 결과를 얻지 못했습니다. 이에 따라 translate와 left의 차이점에 대해 알아보고, 성능 측면에서는 translate보다 좋지 않지만, 차선책으로서 left를 사용하게 되었습니다.
+- 슬라이드 이동 값을 padding을 포함한 width 값으로 설정해서 생긴 문제로 padding 값을 제외한 width 값으로 이동하도록 수정하여 문제를 해결했습니다.
+- API에 등록된 Img가 없는 경우가 있어 영화 제목으로 대체 했으며 logo가 없는 img도 하단에 영화 제목으로 logo를 대신했습니다.
+
+#### Reference
+
+- [AnimatePresence | Framer for Developers](https://www.framer.com/motion/animate-presence/)
+- [z-index가 동작하지않는 이유 4가지 (그리고 고치는 방법)](https://erwinousy.medium.com/z-index%EA%B0%80-%EB%8F%99%EC%9E%91%ED%95%98%EC%A7%80%EC%95%8A%EB%8A%94-%EC%9D%B4%EC%9C%A0-4%EA%B0%80%EC%A7%80-%EA%B7%B8%EB%A6%AC%EA%B3%A0-%EA%B3%A0%EC%B9%98%EB%8A%94-%EB%B0%A9%EB%B2%95-d5097572b82f)
+- [[CSS] "translateX" vs "left"](https://velog.io/@sarang_daddy/CSS-translateX-vs-left)
+- [HTML5 transform:translate 와 top/left 성능 비교 | WIT블로그](https://wit.nts-corp.com/2013/11/20/378)
+
+---
+
+### 2. pagination 구현
+
+- API에서 받은 배열의 길이를 offset으로 나눠 반응형 pagination을 구현했습니다.
+- 현재 페이지의 위치를 표시하기 위해 page 값과 index 값이 같을 경우 클래스 이름을 다르게 설정해 현재 위치를 표시했습니다.
+  ```jsx
+  <Pagination className="pagination">
+    {offset > 0 &&
+      Array.from({ length: Math.ceil(movies.length / offset) }).map(
+        (_, index) => (
+          <Page
+            className={page === index ? "selected" : ""}
+            key={`page${index + 1}`}
+            transition={{ delay: 0.5 }}
+          />
+        )
+      )}
+  </Pagination>
+  ```
+
+#### 문제
+
+- 화면의 너비를 최소로 설정한 상태에서 페이지를 맨 끝으로 이동시킨 후 화면 너비를 키우면 페이지 정보를 알 수 없는 문제가 발생합니다.
+
+#### 해결 과정
+
+- 반응형으로 구현되어 offset은 변경되지만, page 값은 변경되지 않는 상태에서 화면 너비를 늘리면 page 값이 최댓값을 초과하는 문제로 이를 해결하기 위해 reszie 이벤트에 추가로 페이지값을 변경하도록 수정했습니다.
+  - page값이 pageMaxIndex 값보다 큰 경우 pageMax 값을 page에 할당했습니다.
+  - page값이 pageMaxIndex 값보다 작은 경우 그대로 할당해 변경이 없도록 했습니다.
+
+```jsx
+const onResize = () => {
+  const width = window.innerWidth;
+  const offsets = [
+    { width: 1400, offset: 6 },
+    { width: 1100, offset: 5 },
+    { width: 800, offset: 4 },
+    { width: 0, offset: 3 },
+  ];
+  const offset = offsets.find((item) => width >= item.width)?.offset || 6;
+
+  setPage(([page, direction]) => {
+    const pageMaxIndex = Math.ceil(newMovieIds.length / offset) - 1;
+    if (page > pageMaxIndex) {
+      return [pageMaxIndex, direction];
+    }
+    return [page, direction];
+  });
+  setScreenWidth(width);
+  setOffset(offset);
+};
+```
+
+---
+
+### 3. Lazy Loading으로 이미지 로딩 속도 개선
+
+#### 개요
+
+슬라이더를 새로 추가할 때마다 불러와야 할 이미지가 많아 이를 개선 하고자 레이지 로딩을 적용해 봤습니다.
+
+#### 문제
+
+- 이미지 태그에 LazyLoad를 적용하면 슬라이더 내의 모든 이미지를 로딩하는 것이 아니라 보이는 부분만 로딩하는 현상이 발생합니다.
+- 로딩 중을 나타내는 플레이스홀더가 없어 이미지가 로딩되기 전에 빈 공간이 생기는 문제가 있습니다.
+  <img width="600" alt="empty space" src="https://github.com/colorv/react-practice2/assets/75740740/d8c7f6a6-b815-433c-a376-a02daf431c84">
+
+#### 해결 과정
+
+- 슬라이더 내의 모든 이미지를 로딩하기 위해 이미지 태그가 아닌 이미지를 담고 있는 태그에 LazyLoad을 적용하여 문제를 해결하였습니다.
+- 로딩되기 전에 빈 공간이 생기는 문제를 해결하기 위해 lazyLoaded state를 만들어 해결했습니다. 로딩되기 전에는 해당 이미지 대신 영화 제목을 표시하여 로딩 상태를 시각적으로 표현하고 이미지 로딩이 완료되면 이미지가 영화 제목 위에 나타나도록 처리하였습니다.
+
+  ```jsx
+  const [lazyLoaded, setLazyLoaded] = useState(false);
+
+  <Slider>
+    <Header>
+      <Title></Title>
+    </Header>
+    {lazyLoaded ? null : <Main></Main>}
+    <LazyLoad onContentVisible={() => setLazyLoaded(true)} offset={500}>
+      <Main></Main>
+    </LazyLoad>
+  </Slider>;
+  ```
+
+#### 결과
+
+- 개발자 도구를 이용해 느린 3G 네트워크 환경에서 테스트한 결과, 리소스 크기를 7.0MB에서 5.1MB로 줄이고 로딩 시간을 3.5분에서 2.8분으로 개선하였습니다.
+
+#### Reference
+
+- [웹 성능 개선 - 이미지 lazy loading(리액트)](https://petaverse.pe.kr/entry/%EC%9B%B9-%EC%84%B1%EB%8A%A5-%EA%B0%9C%EC%84%A0-%EC%9D%B4%EB%AF%B8%EC%A7%80-lazy-loading%EB%A6%AC%EC%95%A1%ED%8A%B8)
+
+- [웹 성능 최적화를 위한 Image Lazy Loading 기법](https://helloinyong.tistory.com/297)
+
+---
+
+### 4. 프로젝트 폴더 구조 개선
+
+#### 개요
+
+- 작은 프로젝트지만 확장성을 생각 안 한 너무 단순한 구조로 코드 관리의 어려움이 있을 것 같아 구조를 개선해 봤습니다.
+
+#### 폴더구조
 
 ```
 # 이전에 사용한 폴더 구조
+
 src
-├── Components
-│   └── file
+├── components
 └── Routes
-    └── file
 
 # 변경한 폴더 구조
+
 src
 ├── common
-│   └── types
+│ └── types
 ├── components // 재사용 가능 컴포넌트
 ├── constants // 공통 상수
 ├── icons // 아이콘
@@ -49,63 +193,93 @@ src
 └── utils // 공통 함수
 ```
 
-#### 변경 이유
+#### 느낀 점
 
-- 작은 프로젝트지만 확장성을 생각안한 너무 단순한 구조
-- 앞으로 큰 프로젝트를 한다 가정하고 각 파일들을 용도에 맞게 분류 해보기 위함
+- 기존에는 파일 생성을 components 폴더에만 하다 보니 한눈에 안 들어오는 문제점이 생겼습니다.
+- 검색을 통해 알게 된 사실은 프로젝트 폴더 구조에는 정해진 정답은 없지만 일반적으로 사용되는 공통적인 폴더 구조가 있다는 것을 알게 되었습니다.
+- 효율적인 관리를 위해 폴더 구조를 변경하고 기존의 파일들을 분류했습니다.
 
-## Challenge & Experience
+#### Reference
 
-1. framer motion으로 슬라이더 만들시 netflix 와 비슷하게 만드려고 하면 position 문제가 생겨서 새로운 슬라이더가 밑에서 출연
+- [React | 리액트로 프로젝트를 진행할때 어떻게 폴더와 컴포넌트 구조를 설계하는 것이 좋을까?🤔](https://velog.io/@_seeul/React-%EB%A6%AC%EC%95%A1%ED%8A%B8%EB%A1%9C-%ED%94%84%EB%A1%9C%EC%A0%9D%ED%8A%B8%EB%A5%BC-%EC%A7%84%ED%96%89%ED%95%A0%EB%95%8C-%EC%96%B4%EB%96%BB%EA%B2%8C-%ED%8F%B4%EB%8D%94-%EA%B5%AC%EC%A1%B0%EB%A5%BC-%EC%9E%A1%EB%8A%94%EA%B2%83%EC%9D%B4-%EC%A2%8B%EC%9D%84%EA%B9%8C)
 
-   - popuplayout 속성을 사용해서 같은 곳에서 사라지거나 나타나게 할 수 는 있으나 사라지는 슬라이더와 나타나는 슬라이더가 일정 부분에서 겹쳐서 자연스럽지 않음
-     - 슬라이더 좌,우 padding 값만큼 빼거나 더해서 해결
-   - framer motion을 사용하지 않고 transform: `translateX(-${슬라이더크기 * page}px)`을 사용해서 슬라이더 구현했을 경우
-     - translateX를 사용하면 hover했을때 나타나는 movie의 z-index 문제가 생겨 일부분 잘리는 현상이 있음
-     - tranlateX 대신 left를 사용하면 z-index 문제는 해결됌
-   - 슬라이더 마지막 페이지에서 offset에 따라 빈 부분이 발생 , 마지막 페이지 에서 오른쪽 버튼에 첫번째 아이템이 와야함
-     - 배열의 길이 % offset 을 이용해 배열의 값을 재배치해서 해결
-   - 마지막 페이지에서 처음 페이지로 돌아가면 animation 효과가 반대로 진행함
-     - framer motion을 사용해서 새로운 슬라이더가 계속 나타나도록해서 해결함
+- [[React] 리액트의 폴더 구조](https://velog.io/@sisofiy626/React-리액트의-폴더-구조)
 
-2. 중복되는 코드 줄이기
+- [파일 구조 – React](https://ko.legacy.reactjs.org/docs/faq-structure.html)
 
-   - 문제점
-     - Home을 기준으로 다른 page에 복사 붙여넣기로 만들어 유지보수가 어려움
-   - 해결방법
-     - layout 만들어서 통합하기
+---
 
-3. pagination<br/>
-   슬라이더 현재 어떤 페이지에 있는지 알려줌
+### 5. 중복되는 코드 줄이기
 
-   - 문제
-     - 화면크기에 따라 offset을 조절하기 때문에 page가 증거하거나 감소한다.
-     - 화면크기가 작아지면 page 값이 증가하는데 page 끝에서 화면 크기를 키우면 현재 어떤 페이지인지 알 수 없게되는 현상
-   - 해결방법
-     - [내용추가]
+#### 개요
 
-4. Nav - 메뉴 hover
+- 새로 만든 페이지들이 Home을 기반으로 복사 붙여넣기 하여 작성한 결과, 유지 보수가 어렵고 재사용성이 좋지 않았습니다.
 
-   - 문제
-     - 메뉴 hover상태에서 modal창이 나타나지만 메뉴에서 마우스가 벗어나는 순간 사라지는 현상
-   - 해결방법
+#### 해결 과정
 
-5. slider hover 문제
+- 코드 리팩토링을 통해 기존 페이지의 중복 코드를 줄여 200줄 이상의 코드를 88줄로 줄였습니다.
+- 슬라이더를 추가할 때마다 9줄씩 늘어나던 코드를 객체 배열로 변경하여, title과 option 값만 입력하면 1줄로 슬라이더가 추가되도록 개선하였습니다.
+- 슬라이더 추가 시 발생하는 오류를 방지하기 위해, title 값은 문자열로만 입력받도록 하고, option 값은 "default"와 "ranking"만 받도록 interface를 활용하여 오류를 최소화했습니다.
+- Layout을 이용해 페이지를 구성함으로써 새로운 페이지를 만들기 쉬워졌으며 슬라이더도 쉽게 추가 할 수 있게 되었습니다.
 
-   - 문제
-     - 현재 슬라이더에 item hover시 작동을 안하거나 부자연스럽게 작동함
-   - 해결방법
-     - [내용추가]
+#### Layout으로 page 구성
 
+```jsx
+// 기존 page 구성
+return (
+  <>
+    <Helmet>
+      <title>홈 - 넷플릭스</title>
+    </Helmet>
+    <Main>
+      <Slider1 />
+      <Slider2 />
+      <Footer />
+    </Main>
+    <ModalPreveiw />
+    <AllMovie />
+  </>
+);
 ```
-위에 추가할지 생각해보기
 
-- APP.tsx 에서 `<Footer/>` 추가시 preview page에서 Footer가 위로 올라옴
-- 슬라이더 이벤트(이전,다음 페이지 이동)
-  - 페이지 이동시 배열을 잘라서 뒤로 붙이는 식으로 구현함
-  - 불필요하게 배열을 만들어서 사용하는것보다 슬라이더 크기값 만큼 이동시키면 좋지 않을까 생각중
-- API에 IMG가 없는 문제
+```jsx
+// 중복된 코드 제거 후 page 구성
+return (
+  <>
+    <Layout>
+      <Slider1 />
+      <Slider2 />
+    </Layout>
+  </>
+);
+```
 
+#### 슬라이더 추가 방식 변경
+
+<span></span>
+
+```jsx
+// 기존 슬라이더 추가 방식
+{
+  quries[1].data ? (
+    <MovieSlider
+      title="회원님을 위한 오늘의 특선"
+      content="movie"
+      category="now_playing"
+      sliderIndex={1}
+      movieId={nowPlaying[1].data.results.map((movie) => movie.id)}
+    />
+  ) : null;
+}
+```
+
+```jsx
+// 변경후 슬라이더 추가 방식
+const slider: sliderProps[] = [
+    { title: "지난 1년간 공개된 콘텐츠", option: "default" },
+    { title: "오늘 대한민국의 TOP 10 시리즈", option: "ranking" }
+    { title: "다큐멘터리", option: "default" },
+];
 ```
 
 # 수정하기
@@ -126,9 +300,9 @@ src
   - [x] 첫번째랑 마지막 item이 hover시 슬라이더 padding값을 넘기지 않게 수정하기
   - [ ] hover상태에서 sliderHandle, 모두보기 숨기기
   - [ ] 슬라이더 movie hover시 부자연스러움
-  - [ ] pagination 버그 : 6에서 4로 갔을때
+  - [x] pagination 버그 : 6에서 4로 갔을때
 - Font
-  - [ ] Chrome, Safari : font 다르게 적용되고 있어 수정 필요
+  - [x] Chrome, Safari : font 다르게 적용되고 있어 수정 필요
 
 # 추가하기
 
@@ -138,7 +312,6 @@ src
   - [x] 추가 삭제 utils.ts에 추가하기
   - [x] previewModal mylist로 추가하는 버튼 만들기
   - [x] [myListMovies, setMyListMovies] recoil로 관리하기
-  - [ ] hover(miniModal)에서 추가하면 hover 풀림 고치기
 - 언어별로 찾아보기(OriginalAudio.tsx)
   - [x] 슬라이더 사용하지 않고 그리드로 movies 보여주기
 - 슬라이더(세로 포스터)
@@ -146,28 +319,20 @@ src
 - onClickPreview
   - [ ] page별로 중복돼서 사용중이므로 utils.ts로 통합해보기
 - Nav
-  - [ ] 미디어쿼리 사용해서 width 줄어들면 메뉴만 표시
-  - [ ] 메뉴 hover시 modal창 띄우기
+  - [x] 미디어쿼리 사용해서 width 줄어들면 메뉴만 표시
+  - [x] 메뉴 hover시 modal창 띄우기
 - regex
   - [ ] path 제한하고 원치 않는곳은 404 페이지로 보내기
 - Tv
   - [ ] TMDB에서 movie가 아닌 tv로 시리즈 받아오기
-- API
-  - [ ] 첫 로딩 이후 일 부분만 보여주고, 스크롤 내릴때 추가로 API요청 보내기
+- Lazy Loading
+  - [x] 이미지 로딩 성능 개선을 위해 lazy load 적용하기
 - 모두보기 Modal
-  - [ ] Preview page처럼 allVideos Component만들기
+  - [x] Preview page처럼 allVideos Component만들기
+  - [ ] allVideos 내용 채우기 (해당 슬라이더에 포함된 영화 다 보여주기)
 - Video
   - [ ] API에서 YouTube key값 받아와서 예고편 실행 시키기
     - key값 넣고 demo확인 - [https://developers.google.com/youtube/youtube_player_demo]
-
-# Task
-
-```
-임시
-```
-
-<img width="607" alt="Task" src="https://github.com/colorv/react-practice2/assets/75740740/54b61958-bb62-4d0e-9d00-497272e05670">
-<a href="https://suhyeok0110.notion.site/74f22d80cf274ec5aeb96a50d82bfd60?v=7b7fb0fd96fd485f8da369d943f79162">링크</a>
 
 # Installation
 
@@ -189,6 +354,7 @@ React 버전은 최신 버전인 18.2.0으로 개발 했습니다.<br/>
 ## Environment
 
 환경 변수는 프로젝트의 루트 패스 기준으로 `.env` 파일을 생성해서 내용을 기입해주세요.
+
 <img width="298" alt="스크린샷 2023-06-01 오후 9 53 07" src="https://github.com/colorv/react-practice2/assets/75740740/c6d162a0-7a68-40de-807e-c54b632ad13b">
 
 <p align="center">
