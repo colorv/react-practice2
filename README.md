@@ -9,10 +9,9 @@
 <img width="400" alt="변경전" src="https://github.com/colorv/react-practice2/assets/75740740/934a7ddb-9bda-43f9-88ee-f5307e637dfe">
 <img width="400" alt="변경후" src="https://github.com/colorv/react-practice2/assets/75740740/b3c931aa-8d45-498b-bb7f-5ebb81c2e8f7">
 </p>
-<div style="display: flex;justify-content: space-around;">
-<span>변경전(<a href="https://nomadcoders.github.io/react-masterclass/">바로가기</a>)</span>
-<span>변경후(<a href="https://colorv.github.io/react-practice2/">바로가기</a>)</span>
-</div>
+
+- 변경 전([바로가기](https://nomadcoders.github.io/react-masterclass/))
+- 변경 후([바로가기](https://colorv.github.io/react-practice2/))
 
 ## Skill
 
@@ -152,6 +151,8 @@ const onResize = () => {
   </Slider>;
   ```
 
+  <img width="700" alt="placeholder" src="https://github.com/colorv/react-practice2/assets/75740740/6fc92fec-500a-40b4-9f28-edf290edeb56">
+
 #### 결과
 
 - 개발자 도구를 이용해 느린 3G 네트워크 환경에서 테스트한 결과, 리소스 크기를 7.0MB에서 5.1MB로 줄이고 로딩 시간을 3.5분에서 2.8분으로 개선하였습니다.
@@ -282,7 +283,7 @@ const slider: sliderProps[] = [
 ];
 ```
 
-# 수정하기
+## 수정하기
 
 - GitHub.io
   - [x] https://colorv.github.io/react-practice2/ - github.io 404 해결하기
@@ -304,7 +305,7 @@ const slider: sliderProps[] = [
 - Font
   - [x] Chrome, Safari : font 다르게 적용되고 있어 수정 필요
 
-# 추가하기
+## 추가하기
 
 - 내가 찜한 콘텐츠(Mylist.tsx)
   - [x] localstorage 저장
@@ -334,14 +335,14 @@ const slider: sliderProps[] = [
   - [ ] API에서 YouTube key값 받아와서 예고편 실행 시키기
     - key값 넣고 demo확인 - [https://developers.google.com/youtube/youtube_player_demo]
 
-# Installation
+## Installation
 
 React 버전은 최신 버전인 18.2.0으로 개발 했습니다.<br/>
 필요에 따라 NPM 사이트에서 프로젝트 생성일 기준 최신버전으로 설치했습니다.
 
 <pre><code>$ npm install</code></pre>
 
-## Version
+### Version
 
 - React : 18.2.0
 - React-query : 3.39.2
