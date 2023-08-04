@@ -25,6 +25,7 @@ import {
   RightArrow,
   ThumbsUp,
 } from "../icons/Icons";
+import LazyLoad from "react-lazy-load";
 
 const Slider = styled.section`
   width: 100vw;
@@ -239,7 +240,6 @@ const HoverMovie = styled(motion.div)`
   top: 0;
   background-color: ${({ theme }) => theme.black.bgColor};
   width: 97%;
-  /* min-width: 227px; */
   box-shadow: 0px 2px 10px rgba(0, 0, 0, 0.4);
   border-radius: 6px;
   z-index: 5;
@@ -430,6 +430,7 @@ function MovieSlider<T extends Content>({
   const [animationEnd, setAnimationEnd] = useState(false);
   const [offset, setOffset] = useState(0);
   const [screenWidth, setScreenWidth] = useState(0);
+  const [lazyLoaded, setLazyLoaded] = useState(false);
   const [{ hover, hoverId, hoverSliderIndex, position }, setHover] =
     useRecoilState(hoverState);
   const [myListMovies, setMyListMovies] = useRecoilState(myListMoviesState);
@@ -542,7 +543,7 @@ function MovieSlider<T extends Content>({
   // onClick Preview
   const onClickPreview = (previewId: number | undefined, y: number) => {
     if (previewId === undefined) return;
-
+    console.log(y);
     setScrollY(y);
     setPreviewActive(true);
     history(`${currentPath === "/" ? "" : `${currentPath}/`}${previewId}`);
@@ -561,7 +562,7 @@ function MovieSlider<T extends Content>({
     setPage(([page, direction]) => {
       const pageMaxIndex = Math.ceil(newMovieIds.length / offset) - 1;
       if (page > pageMaxIndex) {
-        return [pageMaxIndex, 0];
+        return [pageMaxIndex, direction];
       }
       return [page, direction];
     });
@@ -574,9 +575,11 @@ function MovieSlider<T extends Content>({
     return () => {
       window.removeEventListener("resize", onResize);
     };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
   useEffect(() => {
     onResize();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   useEffect(() => {
@@ -586,6 +589,7 @@ function MovieSlider<T extends Content>({
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
+
   return (
     <>
       {allMoviesLoaded && (
@@ -604,253 +608,288 @@ function MovieSlider<T extends Content>({
             </LinkContainer>
           </Header>
 
-          <Main className="slider-hover">
-            {btnHide ? null : (
-              <SliderHandle
-                className="handlePrev"
-                onClick={() => paginate(-1, movies.length)}
-                onHoverStart={resetHoverState}
-                initial={{ opacity: 0 }}
-                animate={{ opacity: 1 }}
-                transition={{ delay: 0.5 }}
-              >
-                <Direction className="handle-direction">
-                  <LeftArrow />
-                </Direction>
-              </SliderHandle>
-            )}
-            <SliderContent className="slider-contents">
-              <Pagination className="pagination">
-                {new Array(Math.ceil(movies.length / offset))
-                  .fill(null)
-                  .map((_, index) => (
-                    <Page
-                      className={page === index ? "selected" : ""}
-                      key={`page${index + 1}`}
-                      transition={{ delay: 0.5 }}
-                    />
-                  ))}
-              </Pagination>
-
-              <AnimatePresence
-                initial={false}
-                mode="popLayout"
-                custom={{
-                  direction,
-                  btnHide,
-                  sliderWidth: screenWidth - screenWidth * 0.08,
-                }}
-              >
-                <MovieList
-                  className={`item-list ${
-                    btnHide ? "leftHandle-disabled" : ""
-                  }`}
-                  key={page}
-                  variants={sliderVariants}
-                  initial="initial"
-                  animate="animate"
-                  exit="end"
-                  custom={{
-                    direction,
-                    btnHide,
-                    sliderWidth: screenWidth - screenWidth * 0.08,
-                  }}
-                >
+          {lazyLoaded ? null : (
+            <Main className="slider-hover">
+              <SliderContent className="slider-contents">
+                <MovieList className={"leftHandle-disabled"}>
                   {movies.map((movie, index) => (
                     <Movie
                       key={index}
                       x={String(
                         Math.floor((screenWidth - screenWidth * 0.08) / offset)
                       )}
-                      onMouseEnter={() =>
-                        handleMovieHover(String(movie.data?.id), index)
-                      }
                       className={`slider-item item-${
                         index < offset + 2 ? index : ""
                       } `}
                     >
-                      <MovieImgWrapper
-                        onClick={() =>
-                          onClickPreview(movie.data?.id, scrollY.get())
-                        }
-                      >
-                        {movie.data?.images.backdrops.length !== 0 ? (
-                          <MovieImg
-                            src={getImage(
-                              movie.data?.images.backdrops[0].file_path,
-                              "w500"
-                            )}
-                          />
-                        ) : (
-                          <MovieImg
-                            src={getImage(movie.data?.backdrop_path, "w500")}
-                          />
-                        )}
-                        <MovieTitle
-                          className={`${
-                            movie.data?.images.backdrops.length === 0 &&
-                            movie.data?.backdrop_path
-                              ? "no-logo"
-                              : ""
-                          }`}
-                        >
+                      <MovieImgWrapper>
+                        <MovieTitle>
                           <span>{movie.data?.title}</span>
                         </MovieTitle>
                       </MovieImgWrapper>
-
-                      <AnimatePresence>
-                        {hover &&
-                        sliderIndex === hoverSliderIndex &&
-                        movie.data?.id === Number(hoverId) ? (
-                          <HoverMovie
-                            variants={hoverVariants}
-                            initial={
-                              position === "firstChild"
-                                ? "fistChild"
-                                : position === "lastChild"
-                                ? "lastChild"
-                                : "initial"
-                            }
-                            animate="animate"
-                            exit="exit"
-                            onMouseLeave={resetHoverState}
-                          >
-                            <MovieImgWrapper
-                              className="mini-modal-img"
-                              onClick={() =>
-                                onClickPreview(movie.data?.id, scrollY.get())
-                              }
-                            >
-                              {movie.data?.images.backdrops.length !== 0 ? (
-                                <MovieImg
-                                  src={getImage(
-                                    movie.data?.images.backdrops[0].file_path,
-                                    "w500"
-                                  )}
-                                />
-                              ) : (
-                                <MovieImg
-                                  src={getImage(
-                                    movie.data?.backdrop_path,
-                                    "w500"
-                                  )}
-                                />
-                              )}
-                              <MovieTitle>
-                                <span>{movie.data?.title}</span>
-                              </MovieTitle>
-                            </MovieImgWrapper>
-                            <MovieInfo variants={hoverVariants} exit="hidden">
-                              <BtnContainer>
-                                <BtnColumn>
-                                  <CircleBtn>
-                                    <CirclePlayIcon />
-                                  </CircleBtn>
-                                </BtnColumn>
-                                <BtnColumn>
-                                  {myListMovies.includes(movie.data.id) ? (
-                                    <CircleBtn
-                                      onClick={() =>
-                                        removeFromMyList(
-                                          movie.data?.id,
-                                          myListMovies,
-                                          setMyListMovies
-                                        )
-                                      }
-                                      style={{ padding: "0.4vw" }}
-                                    >
-                                      <CheckIcon />
-                                    </CircleBtn>
-                                  ) : (
-                                    <CircleBtn
-                                      onClick={() =>
-                                        saveToMyList(
-                                          movie.data?.id,
-                                          myListMovies,
-                                          setMyListMovies
-                                        )
-                                      }
-                                      style={{ padding: "0.4vw" }}
-                                    >
-                                      <PlusIcon />
-                                    </CircleBtn>
-                                  )}
-                                </BtnColumn>
-                                <BtnColumn>
-                                  <CircleBtn>
-                                    <ThumbsUp />
-                                  </CircleBtn>
-                                </BtnColumn>
-                                <BtnColumn>
-                                  <CircleBtn
-                                    onClick={() =>
-                                      onClickPreview(
-                                        movie.data?.id,
-                                        scrollY.get()
-                                      )
-                                    }
-                                  >
-                                    <DownIcon />
-                                  </CircleBtn>
-                                </BtnColumn>
-                              </BtnContainer>
-
-                              <InfoContainer>
-                                <InfoContainerColumn>
-                                  <VoteAverage>
-                                    {`평점 ${Math.round(
-                                      movie.data?.vote_average * 10
-                                    )}%`}
-                                  </VoteAverage>
-                                </InfoContainerColumn>
-                                <InfoContainerColumn>
-                                  <FilmRating
-                                    ratingResult={
-                                      movie.data?.release_dates.results
-                                    }
-                                  />
-                                  <span>{`${Math.floor(
-                                    movie.data?.runtime / 60
-                                  )}시간 ${movie.data?.runtime % 60}분`}</span>
-                                </InfoContainerColumn>
-                              </InfoContainer>
-
-                              <GenreContainer className="genre">
-                                {movie.data?.genres.map((genre, index) =>
-                                  index === 0 ? (
-                                    <Genre key={genre.id}>
-                                      <span>{genre.name}</span>
-                                    </Genre>
-                                  ) : (
-                                    <Genre key={genre.id}>
-                                      <Period>
-                                        <PeriodIcon />
-                                      </Period>
-                                      <span>{genre.name}</span>
-                                    </Genre>
-                                  )
-                                )}
-                              </GenreContainer>
-                            </MovieInfo>
-                          </HoverMovie>
-                        ) : null}
-                      </AnimatePresence>
                     </Movie>
                   ))}
                 </MovieList>
-              </AnimatePresence>
-            </SliderContent>
+              </SliderContent>
+            </Main>
+          )}
 
-            <SliderHandle
-              className="handleNext"
-              onClick={() => paginate(1, movies.length)}
-              onHoverStart={resetHoverState}
-            >
-              <Direction className="handle-direction">
-                <RightArrow />
-              </Direction>
-            </SliderHandle>
-          </Main>
+          <LazyLoad onContentVisible={() => setLazyLoaded(true)} offset={500}>
+            <Main className="slider-hover">
+              {btnHide ? null : (
+                <SliderHandle
+                  className="handlePrev"
+                  onClick={() => paginate(-1, movies.length)}
+                  onHoverStart={resetHoverState}
+                  initial={{ opacity: 0 }}
+                  animate={{ opacity: 1 }}
+                  transition={{ delay: 0.5 }}
+                >
+                  <Direction className="handle-direction">
+                    <LeftArrow />
+                  </Direction>
+                </SliderHandle>
+              )}
+              <SliderContent className="slider-contents">
+                <Pagination className="pagination">
+                  {offset > 0 &&
+                    Array.from({
+                      length: Math.ceil(movies.length / offset),
+                    }).map((_, index) => (
+                      <Page
+                        className={page === index ? "selected" : ""}
+                        key={`page${index + 1}`}
+                        transition={{ delay: 0.5 }}
+                      />
+                    ))}
+                </Pagination>
+
+                <AnimatePresence
+                  initial={false}
+                  mode="popLayout"
+                  custom={{
+                    direction,
+                    btnHide,
+                    sliderWidth: screenWidth - screenWidth * 0.08,
+                  }}
+                >
+                  <MovieList
+                    className={`item-list ${
+                      btnHide ? "leftHandle-disabled" : ""
+                    }`}
+                    key={page}
+                    variants={sliderVariants}
+                    initial="initial"
+                    animate="animate"
+                    exit="end"
+                    custom={{
+                      direction,
+                      btnHide,
+                      sliderWidth: screenWidth - screenWidth * 0.08,
+                    }}
+                  >
+                    {movies.map((movie, index) => (
+                      <Movie
+                        key={index}
+                        x={String(
+                          Math.floor(
+                            (screenWidth - screenWidth * 0.08) / offset
+                          )
+                        )}
+                        onMouseEnter={() =>
+                          handleMovieHover(String(movie.data?.id), index)
+                        }
+                        className={`slider-item item-${
+                          index < offset + 2 ? index : ""
+                        } `}
+                      >
+                        <MovieImgWrapper
+                          onClick={() =>
+                            onClickPreview(movie.data?.id, scrollY.get())
+                          }
+                        >
+                          {movie.data?.images.backdrops.length !== 0 ? (
+                            <MovieImg
+                              src={getImage(
+                                movie.data?.images.backdrops[0].file_path,
+                                "w342"
+                              )}
+                            />
+                          ) : (
+                            <MovieImg
+                              src={getImage(movie.data?.backdrop_path, "w342")}
+                            />
+                          )}
+
+                          <MovieTitle
+                            className={`${
+                              movie.data?.images.backdrops.length === 0 &&
+                              movie.data?.backdrop_path
+                                ? "no-logo"
+                                : ""
+                            }`}
+                          >
+                            <span>{movie.data?.title}</span>
+                          </MovieTitle>
+                        </MovieImgWrapper>
+
+                        <AnimatePresence>
+                          {hover &&
+                          sliderIndex === hoverSliderIndex &&
+                          movie.data?.id === Number(hoverId) ? (
+                            <HoverMovie
+                              variants={hoverVariants}
+                              initial={
+                                position === "firstChild"
+                                  ? "fistChild"
+                                  : position === "lastChild"
+                                  ? "lastChild"
+                                  : "initial"
+                              }
+                              animate="animate"
+                              exit="exit"
+                              onMouseLeave={resetHoverState}
+                            >
+                              <MovieImgWrapper
+                                className="mini-modal-img"
+                                onClick={() =>
+                                  onClickPreview(movie.data?.id, scrollY.get())
+                                }
+                              >
+                                {movie.data?.images.backdrops.length !== 0 ? (
+                                  <MovieImg
+                                    src={getImage(
+                                      movie.data?.images.backdrops[0].file_path,
+                                      "w500"
+                                    )}
+                                  />
+                                ) : (
+                                  <MovieImg
+                                    src={getImage(
+                                      movie.data?.backdrop_path,
+                                      "w500"
+                                    )}
+                                  />
+                                )}
+                                <MovieTitle>
+                                  <span>{movie.data?.title}</span>
+                                </MovieTitle>
+                              </MovieImgWrapper>
+
+                              <MovieInfo variants={hoverVariants} exit="hidden">
+                                <BtnContainer>
+                                  <BtnColumn>
+                                    <CircleBtn>
+                                      <CirclePlayIcon />
+                                    </CircleBtn>
+                                  </BtnColumn>
+                                  <BtnColumn>
+                                    {myListMovies.includes(movie.data.id) ? (
+                                      <CircleBtn
+                                        onClick={() =>
+                                          removeFromMyList(
+                                            movie.data?.id,
+                                            myListMovies,
+                                            setMyListMovies
+                                          )
+                                        }
+                                        style={{ padding: "0.4vw" }}
+                                      >
+                                        <CheckIcon />
+                                      </CircleBtn>
+                                    ) : (
+                                      <CircleBtn
+                                        onClick={() =>
+                                          saveToMyList(
+                                            movie.data?.id,
+                                            myListMovies,
+                                            setMyListMovies
+                                          )
+                                        }
+                                        style={{ padding: "0.4vw" }}
+                                      >
+                                        <PlusIcon />
+                                      </CircleBtn>
+                                    )}
+                                  </BtnColumn>
+                                  <BtnColumn>
+                                    <CircleBtn>
+                                      <ThumbsUp />
+                                    </CircleBtn>
+                                  </BtnColumn>
+                                  <BtnColumn>
+                                    <CircleBtn
+                                      onClick={() =>
+                                        onClickPreview(
+                                          movie.data?.id,
+                                          scrollY.get()
+                                        )
+                                      }
+                                    >
+                                      <DownIcon />
+                                    </CircleBtn>
+                                  </BtnColumn>
+                                </BtnContainer>
+
+                                <InfoContainer>
+                                  <InfoContainerColumn>
+                                    <VoteAverage>
+                                      {`평점 ${Math.round(
+                                        movie.data?.vote_average * 10
+                                      )}%`}
+                                    </VoteAverage>
+                                  </InfoContainerColumn>
+                                  <InfoContainerColumn>
+                                    <FilmRating
+                                      ratingResult={
+                                        movie.data?.release_dates.results
+                                      }
+                                    />
+                                    <span>{`${Math.floor(
+                                      movie.data?.runtime / 60
+                                    )}시간 ${
+                                      movie.data?.runtime % 60
+                                    }분`}</span>
+                                  </InfoContainerColumn>
+                                </InfoContainer>
+
+                                <GenreContainer className="genre">
+                                  {movie.data?.genres.map((genre, index) =>
+                                    index === 0 ? (
+                                      <Genre key={genre.id}>
+                                        <span>{genre.name}</span>
+                                      </Genre>
+                                    ) : (
+                                      <Genre key={genre.id}>
+                                        <Period>
+                                          <PeriodIcon />
+                                        </Period>
+                                        <span>{genre.name}</span>
+                                      </Genre>
+                                    )
+                                  )}
+                                </GenreContainer>
+                              </MovieInfo>
+                            </HoverMovie>
+                          ) : null}
+                        </AnimatePresence>
+                      </Movie>
+                    ))}
+                  </MovieList>
+                </AnimatePresence>
+              </SliderContent>
+
+              <SliderHandle
+                className="handleNext"
+                onClick={() => paginate(1, movies.length)}
+                onHoverStart={resetHoverState}
+              >
+                <Direction className="handle-direction">
+                  <RightArrow />
+                </Direction>
+              </SliderHandle>
+            </Main>
+          </LazyLoad>
         </Slider>
       )}
     </>
