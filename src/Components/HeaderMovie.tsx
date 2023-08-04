@@ -160,7 +160,10 @@ function HeaderMovie<T extends Content>({
   return (
     <Container className="header-movie">
       {!isLoading && (
-        <MovieImg src={getImage(data?.backdrop_path)} alt="backdropImg" />
+        <MovieImg
+          src={getImage(data?.backdrop_path, "w1280")}
+          alt="backdropImg"
+        />
       )}
 
       <InfoContainer className="info-container">
